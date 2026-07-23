@@ -1,0 +1,335 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - SupportSight{% endblock %}
+
+{% block auth_content %}
+<div class="auth-container">
+    <div class="auth-wrapper">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="auth-logo">
+                    <i class='bx bx-scan'></i>
+                </div>
+                <h1>SupportSight</h1>
+                <p>AI-Powered Windows Diagnostics</p>
+            </div>
+            
+            <form method="POST" class="auth-form" action="{{ url_for('auth.login') }}">
+                <div class="form-group">
+                    <label for="username" class="form-label">Username or Email</label>
+                    <div class="input-group">
+                        <span class="input-icon"><i class='bx bx-user'></i></span>
+                        <input type="text" class="form-control" id="username" name="username" 
+                               placeholder="Enter your username or email" required autofocus>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="input-group">
+                        <span class="input-icon"><i class='bx bx-lock-alt'></i></span>
+                        <input type="password" class="form-control" id="password" name="password" 
+                               placeholder="Enter your password" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="remember" name="remember">
+                        <label class="form-check-label" for="remember">Remember me</label>
+                    </div>
+                    <a href="{{ url_for('auth.forgot_password') }}" class="forgot-link">Forgot password?</a>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class='bx bx-log-in'></i>
+                    Sign In
+                </button>
+            </form>
+            
+            <div class="auth-divider">
+                <span>or</span>
+            </div>
+            
+            <p class="auth-footer">
+                Don't have an account? <a href="{{ url_for('auth.register') }}">Sign up</a>
+            </p>
+        </div>
+        
+        <div class="auth-features">
+            <div class="feature-item" data-aos="fade-up" data-aos-delay="100">
+                <i class='bx bx-microchip'></i>
+                <h3>CPU Monitoring</h3>
+                <p>Real-time CPU performance and usage tracking</p>
+            </div>
+            <div class="feature-item" data-aos="fade-up" data-aos-delay="200">
+                <i class='bx bx-memory-card'></i>
+                <h3>Memory Analysis</h3>
+                <p>Comprehensive RAM diagnostics and optimization</p>
+            </div>
+            <div class="feature-item" data-aos="fade-up" data-aos-delay="300">
+                <i class='bx bx-shield-alt-2'></i>
+                <h3>Health Score</h3>
+                <p>AI-powered system health assessment</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%);
+    padding: 2rem;
+}
+
+.auth-wrapper {
+    display: flex;
+    gap: 4rem;
+    align-items: center;
+    max-width: 1000px;
+    width: 100%;
+}
+
+.auth-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 3rem;
+    width: 100%;
+    max-width: 420px;
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.auth-logo {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #0078D4, #00bcf2);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+}
+
+.auth-logo i {
+    font-size: 2.5rem;
+    color: white;
+}
+
+.auth-header h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 0.5rem;
+}
+
+.auth-header p {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+}
+
+.auth-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.auth-form .form-label {
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.auth-form .input-group {
+    position: relative;
+}
+
+.auth-form .input-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.5);
+    z-index: 10;
+}
+
+.auth-form .form-control {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 0.875rem 1rem 0.875rem 2.75rem;
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.auth-form .form-control:focus {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: #0078D4;
+    box-shadow: 0 0 0 3px rgba(0, 120, 212, 0.2);
+    outline: none;
+}
+
+.auth-form .form-control::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.auth-form .form-check {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.auth-form .form-check-input {
+    width: 1.125rem;
+    height: 1.125rem;
+    margin: 0;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+.auth-form .form-check-input:checked {
+    background-color: #0078D4;
+    border-color: #0078D4;
+}
+
+.auth-form .form-check-label {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+}
+
+.auth-form .form-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.auth-form .forgot-link {
+    color: #0078D4;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.auth-form .forgot-link:hover {
+    color: #00bcf2;
+}
+
+.auth-form .btn-block {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(135deg, #0078D4, #00bcf2);
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.auth-form .btn-block:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 120, 212, 0.4);
+}
+
+.auth-divider {
+    text-align: center;
+    margin: 1.5rem 0;
+    position: relative;
+}
+
+.auth-divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.auth-divider span {
+    background: rgba(15, 23, 42, 0.8);
+    padding: 0 1rem;
+    color: rgba(255, 255, 255, 0.5);
+    position: relative;
+}
+
+.auth-footer {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.auth-footer a {
+    color: #0078D4;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.auth-footer a:hover {
+    color: #00bcf2;
+}
+
+.auth-features {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.feature-item {
+    text-align: left;
+}
+
+.feature-item i {
+    font-size: 2rem;
+    color: #0078D4;
+    margin-bottom: 0.5rem;
+}
+
+.feature-item h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 0.25rem;
+}
+
+.feature-item p {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+@media (max-width: 900px) {
+    .auth-wrapper {
+        flex-direction: column;
+    }
+    
+    .auth-features {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .feature-item {
+        text-align: center;
+        flex: 1;
+        min-width: 150px;
+    }
+}
+</style>
+{% endblock %}

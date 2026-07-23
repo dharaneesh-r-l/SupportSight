@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}Network Diagnostics - SupportSight{% endblock %}
+{% block page_title %}Network Diagnostics{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-lg-6">
+        <div class="card" data-aos="fade-up">
+            <div class="card-header">
+                <h5><i class='bx bx-wifi'></i> Connection Status</h5>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <div class="status-indicator {{ 'connected' if network.internet_connectivity.connected else 'disconnected' }}">
+                        <i class='bx {{ 'bx-wifi' if network.internet_connectivity.connected else 'bx-wifi-off' }}'></i>
+                    </div>
+                    <h4 class="mt-3">{{ 'Connected' if network.internet_connectivity.connected else 'Disconnected' }}</h4>
+                    {% if network.internet_connectivity.latency %}
+                    <p class="text-muted">Latency: {{ network.internet_connectivity.latency }}ms</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-6">
+        <div class="card" data-aos="fade-up" data-aos-delay="100">
+            <div class="card-header">
+                <h5><i class='bx bx-info-circle'></i> Network Information</h5>
+            </div>
+            <div class="card-body">
+                <div class="info-row">
+                    <div class="info-label">Hostname</div>
+                    <div class="info-value">{{ network.hostname }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Local IP</div>
+                    <div class="info-value">{{ network.local_ip }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Public IP</div>
+                    <div class="info-value">{{ network.public_ip or 'N/A' }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Default Gateway</div>
+                    <div class="info-value">{{ network.default_gateway or 'N/A' }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.status-indicator {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+}
+
+.status-indicator.connected {
+    background: rgba(40, 167, 69, 0.1);
+    color: var(--success);
+}
+
+.status-indicator.disconnected {
+    background: rgba(220, 53, 69, 0.1);
+    color: var(--danger);
+}
+</style>
+{% endblock %}

@@ -1,0 +1,468 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - SupportSight{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<!-- Health Score Section -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card health-score-card" data-aos="fade-up">
+            <div class="card-body">
+                <div class="health-score-container">
+                    <div class="health-score-visual">
+                        <div class="health-score-circle" id="healthScoreCircle">
+                            <svg viewBox="0 0 100 100">
+                                <circle class="health-bg" cx="50" cy="50" r="45"/>
+                                <circle class="health-progress" cx="50" cy="50" r="45" 
+                                        stroke-dasharray="283" stroke-dashoffset="283"/>
+                            </svg>
+                            <div class="health-score-value">
+                                <span class="score" id="healthScoreValue">0</span>
+                                <span class="max">/100</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="health-score-info">
+                        <h2 class="health-title">System Health</h2>
+                        <p class="health-category" id="healthCategory">Loading...</p>
+                        <p class="health-description">
+                            {% if latest_scan %}
+                            Last scan: {{ latest_scan.started_at|format_datetime('%Y-%m-%d %H:%M') if latest_scan.started_at else 'N/A' }}
+                            {% else %}
+                            Run a scan to get your health assessment
+                            {% endif %}
+                        </p>
+                        <a href="{{ url_for('dashboard.quick_scan') }}" class="btn btn-primary mt-3">
+                            <i class='bx bx-scan'></i>
+                            Run Full Scan
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Stats Cards -->
+<div class="row mb-4">
+    <!-- CPU Card -->
+    <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="100">
+        <div class="stat-card cpu-card">
+            <div class="stat-icon">
+                <i class='bx bx-microchip'></i>
+            </div>
+            <div class="stat-content">
+                <span class="stat-label">CPU Usage</span>
+                <span class="stat-value" id="cpuUsage">--</span>
+                <div class="stat-bar">
+                    <div class="stat-bar-fill" id="cpuBar" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- RAM Card -->
+    <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="150">
+        <div class="stat-card ram-card">
+            <div class="stat-icon">
+                <i class='bx bx-memory-card'></i>
+            </div>
+            <div class="stat-content">
+                <span class="stat-label">Memory</span>
+                <span class="stat-value" id="ramUsage">--</span>
+                <div class="stat-bar">
+                    <div class="stat-bar-fill" id="ramBar" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Disk Card -->
+    <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="200">
+        <div class="stat-card disk-card">
+            <div class="stat-icon">
+                <i class='bx bx-hdd'></i>
+            </div>
+            <div class="stat-content">
+                <span class="stat-label">Disk Usage</span>
+                <span class="stat-value" id="diskUsage">--</span>
+                <div class="stat-bar">
+                    <div class="stat-bar-fill" id="diskBar" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Network Card -->
+    <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="250">
+        <div class="stat-card network-card">
+            <div class="stat-icon">
+                <i class='bx bx-wifi'></i>
+            </div>
+            <div class="stat-content">
+                <span class="stat-label">Network</span>
+                <span class="stat-value" id="networkStatus">--</span>
+                <span class="stat-secondary" id="networkLatency"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts and Details Row -->
+<div class="row mb-4">
+    <!-- Usage Chart -->
+    <div class="col-lg-8" data-aos="fade-up" data-aos-delay="300">
+        <div class="card chart-card">
+            <div class="card-header">
+                <h5><i class='bx bx-line-chart'></i> System Performance</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="performanceChart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Quick Actions -->
+    <div class="col-lg-4" data-aos="fade-up" data-aos-delay="350">
+        <div class="card quick-actions-card">
+            <div class="card-header">
+                <h5><i class='bx bx-zap'></i> Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="quick-actions-list">
+                    <a href="{{ url_for('diagnostics.cpu') }}" class="quick-action-item">
+                        <i class='bx bx-microchip'></i>
+                        <span>View CPU Details</span>
+                        <i class='bx bx-chevron-right'></i>
+                    </a>
+                    <a href="{{ url_for('diagnostics.ram') }}" class="quick-action-item">
+                        <i class='bx bx-memory-card'></i>
+                        <span>View Memory Details</span>
+                        <i class='bx bx-chevron-right'></i>
+                    </a>
+                    <a href="{{ url_for('diagnostics.disk') }}" class="quick-action-item">
+                        <i class='bx bx-hdd'></i>
+                        <span>View Disk Details</span>
+                        <i class='bx bx-chevron-right'></i>
+                    </a>
+                    <a href="{{ url_for('diagnostics.network') }}" class="quick-action-item">
+                        <i class='bx bx-wifi'></i>
+                        <span>View Network Details</span>
+                        <i class='bx bx-chevron-right'></i>
+                    </a>
+                    <a href="{{ url_for('diagnostics.processes') }}" class="quick-action-item">
+                        <i class='bx bx-list-ul'></i>
+                        <span>View Processes</span>
+                        <i class='bx bx-chevron-right'></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Scans & Recommendations Row -->
+<div class="row">
+    <!-- Recent Scans -->
+    <div class="col-lg-6" data-aos="fade-up" data-aos-delay="400">
+        <div class="card recent-scans-card">
+            <div class="card-header">
+                <h5><i class='bx bx-history'></i> Recent Scans</h5>
+                <a href="{{ url_for('dashboard.scan_history') }}" class="btn btn-sm btn-link">View All</a>
+            </div>
+            <div class="card-body">
+                {% if recent_scans %}
+                <div class="recent-scans-list">
+                    {% for scan in recent_scans %}
+                    <a href="{{ url_for('dashboard.scan_result', scan_id=scan.id) }}" class="recent-scan-item">
+                        <div class="scan-score score-{{ scan.health_score|int // 20 }}">
+                            {{ scan.health_score }}
+                        </div>
+                        <div class="scan-info">
+                            <span class="scan-date">{{ scan.started_at.strftime('%Y-%m-%d %H:%M') if scan.started_at else 'N/A' }}</span>
+                            <span class="scan-category">{{ scan.health_category }}</span>
+                        </div>
+                        <i class='bx bx-chevron-right'></i>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-state">
+                    <i class='bx bx-scan'></i>
+                    <p>No scans yet. Run your first scan!</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recommendations -->
+    <div class="col-lg-6" data-aos="fade-up" data-aos-delay="450">
+        <div class="card recommendations-card">
+            <div class="card-header">
+                <h5><i class='bx bx-message-detail'></i> Recommendations</h5>
+            </div>
+            <div class="card-body" id="recommendationsContainer">
+                <div class="loading-spinner">
+                    <i class='bx bx-loader-alt bx-spin'></i>
+                    <span>Loading recommendations...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Load health score
+    loadHealthScore();
+    
+    // Load quick status
+    loadQuickStatus();
+    
+    // Initialize charts
+    initPerformanceChart();
+    
+    // Load recommendations
+    loadRecommendations();
+    
+    // Auto-refresh every 30 seconds
+    setInterval(() => {
+        loadHealthScore();
+        loadQuickStatus();
+    }, 30000);
+});
+
+async function loadHealthScore() {
+    try {
+        const response = await fetch('/api/health');
+        const data = await response.json();
+        
+        const score = data.overall_score || 0;
+        const category = data.category || 'Unknown';
+        
+        // Update score display
+        animateValue('healthScoreValue', 0, score, 1500);
+        document.getElementById('healthCategory').textContent = category;
+        
+        // Update circle
+        const circle = document.querySelector('.health-progress');
+        const circumference = 2 * Math.PI * 45;
+        const offset = circumference - (score / 100) * circumference;
+        circle.style.strokeDashoffset = offset;
+        
+        // Set color based on score
+        let color = '#dc3545';
+        if (score >= 80) color = '#28a745';
+        else if (score >= 60) color = '#ffc107';
+        else if (score >= 40) color = '#fd7e14';
+        
+        circle.style.stroke = color;
+    } catch (error) {
+        console.error('Error loading health score:', error);
+    }
+}
+
+async function loadQuickStatus() {
+    try {
+        const response = await fetch('/api/status');
+        const data = await response.json();
+        
+        // Update CPU
+        if (data.cpu) {
+            const cpuUsage = data.cpu.usage || 0;
+            document.getElementById('cpuUsage').textContent = cpuUsage.toFixed(1) + '%';
+            document.getElementById('cpuBar').style.width = cpuUsage + '%';
+            updateBarColor('cpuBar', cpuUsage);
+        }
+        
+        // Update RAM
+        if (data.ram) {
+            const ramUsage = data.ram.percent || 0;
+            document.getElementById('ramUsage').textContent = ramUsage.toFixed(1) + '%';
+            document.getElementById('ramBar').style.width = ramUsage + '%';
+            updateBarColor('ramBar', ramUsage);
+        }
+        
+        // Update Disk
+        if (data.disk && data.disk.overall_percent !== undefined) {
+            const diskUsage = data.disk.overall_percent || 0;
+            document.getElementById('diskUsage').textContent = diskUsage.toFixed(1) + '%';
+            document.getElementById('diskBar').style.width = diskUsage + '%';
+            updateBarColor('diskBar', diskUsage);
+        }
+        
+        // Update Network
+        if (data.network) {
+            const status = data.network.connected ? 'Connected' : 'Disconnected';
+            document.getElementById('networkStatus').textContent = status;
+            document.getElementById('networkStatus').className = 'stat-value ' + 
+                (data.network.connected ? 'text-success' : 'text-danger');
+        }
+    } catch (error) {
+        console.error('Error loading quick status:', error);
+    }
+}
+
+function updateBarColor(barId, value) {
+    const bar = document.getElementById(barId);
+    if (value >= 90) bar.style.backgroundColor = '#dc3545';
+    else if (value >= 70) bar.style.backgroundColor = '#fd7e14';
+    else if (value >= 50) bar.style.backgroundColor = '#ffc107';
+    else bar.style.backgroundColor = '#28a745';
+}
+
+let performanceChart;
+
+function initPerformanceChart() {
+    const ctx = document.getElementById('performanceChart').getContext('2d');
+    
+    performanceChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [
+                {
+                    label: 'CPU',
+                    data: [],
+                    borderColor: '#0078D4',
+                    backgroundColor: 'rgba(0, 120, 212, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                },
+                {
+                    label: 'RAM',
+                    data: [],
+                    borderColor: '#28a745',
+                    backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    ticks: {
+                        callback: function(value) {
+                            return value + '%';
+                        }
+                    }
+                }
+            },
+            interaction: {
+                intersect: false,
+                mode: 'index'
+            }
+        }
+    });
+    
+    // Add initial data
+    updateChart();
+    
+    // Update chart every 5 seconds
+    setInterval(updateChart, 5000);
+}
+
+async function updateChart() {
+    try {
+        const response = await fetch('/api/cpu/history?points=20');
+        const cpuData = await response.json();
+        
+        const ramResponse = await fetch('/api/ram/history?points=20');
+        const ramData = await ramResponse.json();
+        
+        const now = new Date();
+        const labels = Array(20).fill(0).map((_, i) => {
+            const d = new Date(now - (19 - i) * 5000);
+            return d.toLocaleTimeString([], { minute: '2-digit', second: '2-digit' });
+        });
+        
+        performanceChart.data.labels = labels;
+        performanceChart.data.datasets[0].data = cpuData.history?.map(h => h.usage) || [];
+        performanceChart.data.datasets[1].data = ramData.history?.map(h => h.usage) || [];
+        performanceChart.update('none');
+    } catch (error) {
+        console.error('Error updating chart:', error);
+    }
+}
+
+async function loadRecommendations() {
+    const container = document.getElementById('recommendationsContainer');
+    
+    try {
+        const response = await fetch('/api/health');
+        const data = await response.json();
+        
+        if (data.components && data.components.length > 0) {
+            let html = '<div class="recommendations-list">';
+            
+            data.components.forEach(component => {
+                if (component.status !== 'healthy') {
+                    const severityIcon = component.status === 'critical' ? 'exclamation-triangle' : 'info-circle';
+                    const severityClass = component.status === 'critical' ? 'severity-critical' : 'severity-warning';
+                    
+                    html += `
+                        <div class="recommendation-item ${severityClass}">
+                            <div class="recommendation-header">
+                                <i class='bx bx-${severityIcon}'></i>
+                                <span class="recommendation-title">${component.name.toUpperCase()}</span>
+                            </div>
+                            <p class="recommendation-text">${getRecommendationText(component)}</p>
+                        </div>
+                    `;
+                }
+            });
+            
+            html += '</div>';
+            container.innerHTML = html || '<div class="empty-state"><i class="bx bx-check-circle"></i><p>All systems healthy!</p></div>';
+        } else {
+            container.innerHTML = '<div class="empty-state"><i class="bx bx-check-circle"></i><p>All systems healthy!</p></div>';
+        }
+    } catch (error) {
+        console.error('Error loading recommendations:', error);
+        container.innerHTML = '<div class="empty-state"><p>Unable to load recommendations</p></div>';
+    }
+}
+
+function getRecommendationText(component) {
+    const texts = {
+        cpu: `CPU usage at ${component.details?.usage?.toFixed(1) || 0}%. ${component.details?.usage > 70 ? 'Consider closing unused applications.' : 'Normal usage levels.'}`,
+        ram: `Memory at ${component.details?.usage?.toFixed(1) || 0}%. ${component.details?.usage > 70 ? 'Free up some RAM by closing apps.' : 'Memory usage is healthy.'}`,
+        disk: `Disk usage is high. ${component.details?.worst_partition || 'A partition'} is running low on space.`,
+        network: component.details?.connected ? `Network latency: ${component.details?.latency || 'N/A'}ms` : 'No internet connection detected.',
+        battery: component.details?.has_battery ? `Battery at ${component.details?.percent || 0}%. ${component.details?.is_charging ? 'Currently charging.' : 'Consider plugging in.'}` : 'Desktop system - no battery.'
+    };
+    return texts[component.name] || 'Review system settings.';
+}
+
+function animateValue(id, start, end, duration) {
+    const obj = document.getElementById(id);
+    const range = end - start;
+    let current = start;
+    const increment = end > start ? range / (duration / 16) : range / (duration / 16);
+    const timer = setInterval(() => {
+        current += increment;
+        if ((increment > 0 && current >= end) || (increment < 0 && current <= end)) {
+            obj.textContent = Math.round(end);
+            clearInterval(timer);
+        } else {
+            obj.textContent = Math.round(current);
+        }
+    }, 16);
+}
+</script>
+{% endblock %}

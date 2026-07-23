@@ -1,0 +1,88 @@
+<nav id="sidebar" class="sidebar">
+    <div class="sidebar-header">
+        <a href="{{ url_for('dashboard.home') }}" class="sidebar-brand">
+            <i class='bx bx-scan'></i>
+            <span>SupportSight</span>
+        </a>
+        <button class="sidebar-toggle" id="sidebarToggle" title="Toggle Sidebar">
+            <i class='bx bx-chevron-left'></i>
+        </button>
+    </div>
+    
+    <div class="sidebar-menu">
+        <div class="menu-section">
+            <span class="menu-label">Main</span>
+            <a href="{{ url_for('dashboard.home') }}" class="menu-item {% if request.endpoint == 'dashboard.home' %}active{% endif %}" data-tooltip="Dashboard">
+                <i class='bx bxs-dashboard'></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="{{ url_for('dashboard.diagnostics') }}" class="menu-item {% if request.endpoint == 'dashboard.diagnostics' %}active{% endif %}" data-tooltip="Diagnostics">
+                <i class='bx bxs-analyse'></i>
+                <span>Diagnostics</span>
+            </a>
+            <a href="{{ url_for('dashboard.quick_scan') }}" class="menu-item" data-tooltip="Quick Scan">
+                <i class='bx bx-scan'></i>
+                <span>Quick Scan</span>
+            </a>
+        </div>
+        
+        <div class="menu-section">
+            <span class="menu-label">System</span>
+            <a href="{{ url_for('diagnostics.cpu') }}" class="menu-item {% if request.endpoint == 'diagnostics.cpu' %}active{% endif %}" data-tooltip="CPU">
+                <i class='bx bx-microchip'></i>
+                <span>CPU</span>
+            </a>
+            <a href="{{ url_for('diagnostics.ram') }}" class="menu-item {% if request.endpoint == 'diagnostics.ram' %}active{% endif %}" data-tooltip="Memory">
+                <i class='bx bx-memory-card'></i>
+                <span>Memory</span>
+            </a>
+            <a href="{{ url_for('diagnostics.disk') }}" class="menu-item {% if request.endpoint == 'diagnostics.disk' %}active{% endif %}" data-tooltip="Storage">
+                <i class='bx bx-hdd'></i>
+                <span>Storage</span>
+            </a>
+            <a href="{{ url_for('diagnostics.network') }}" class="menu-item {% if request.endpoint == 'diagnostics.network' %}active{% endif %}" data-tooltip="Network">
+                <i class='bx bx-wifi'></i>
+                <span>Network</span>
+            </a>
+            <a href="{{ url_for('diagnostics.battery') }}" class="menu-item {% if request.endpoint == 'diagnostics.battery' %}active{% endif %}" data-tooltip="Battery">
+                <i class='bx bx-battery'></i>
+                <span>Battery</span>
+            </a>
+            <a href="{{ url_for('diagnostics.processes') }}" class="menu-item {% if request.endpoint == 'diagnostics.processes' %}active{% endif %}" data-tooltip="Processes">
+                <i class='bx bx-list-ul'></i>
+                <span>Processes</span>
+            </a>
+        </div>
+        
+        <div class="menu-section">
+            <span class="menu-label">Reports</span>
+            <a href="{{ url_for('dashboard.scan_history') }}" class="menu-item {% if request.endpoint == 'dashboard.scan_history' %}active{% endif %}" data-tooltip="Scan History">
+                <i class='bx bx-history'></i>
+                <span>Scan History</span>
+            </a>
+            <a href="{{ url_for('reports.all_reports') }}" class="menu-item {% if request.endpoint == 'reports.all_reports' %}active{% endif %}" data-tooltip="Reports">
+                <i class='bx bx-file'></i>
+                <span>Reports</span>
+            </a>
+        </div>
+        
+        <div class="menu-section">
+            <span class="menu-label">Settings</span>
+            <a href="{{ url_for('diagnostics.system') }}" class="menu-item {% if request.endpoint == 'diagnostics.system' %}active{% endif %}" data-tooltip="System Info">
+                <i class='bx bx-info-circle'></i>
+                <span>System Info</span>
+            </a>
+            <a href="{{ url_for('auth.profile') }}" class="menu-item {% if request.endpoint == 'auth.profile' %}active{% endif %}" data-tooltip="Profile">
+                <i class='bx bx-user'></i>
+                <span>Profile</span>
+            </a>
+        </div>
+    </div>
+    
+    <div class="sidebar-footer">
+        <a href="{{ url_for('auth.logout') }}" class="menu-item logout-item" data-tooltip="Logout">
+            <i class='bx bx-log-out'></i>
+            <span>Logout</span>
+        </a>
+    </div>
+</nav>

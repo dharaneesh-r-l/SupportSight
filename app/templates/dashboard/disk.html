@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Disk Diagnostics - SupportSight{% endblock %}
+{% block page_title %}Disk Storage Diagnostics{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card" data-aos="fade-up">
+            <div class="card-header">
+                <h5><i class='bx bx-hdd'></i> Disk Partitions</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Drive</th>
+                                <th>File System</th>
+                                <th>Total</th>
+                                <th>Used</th>
+                                <th>Free</th>
+                                <th>Usage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for partition in disk.partitions|default([]) %}
+                            <tr>
+                                <td><strong>{{ partition.mountpoint }}</strong></td>
+                                <td>{{ partition.filesystem }}</td>
+                                <td>{{ partition.total|format_bytes }}</td>
+                                <td>{{ partition.used|format_bytes }}</td>
+                                <td>{{ partition.free|format_bytes }}</td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="progress flex-grow-1" style="max-width: 100px;">
+                                            <div class="progress-bar bg-{{ 'danger' if partition.percent >= 90 else 'warning' if partition.percent >= 80 else 'success' }}" 
+                                                 style="width: {{ partition.percent }}%"></div>
+                                        </div>
+                                        <span>{{ partition.percent|round(1) }}%</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

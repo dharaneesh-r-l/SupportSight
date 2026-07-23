@@ -1,0 +1,423 @@
+{% extends 'base.html' %}
+
+{% block title %}Scan #{{ scan.id }} - SupportSight{% endblock %}
+{% block page_title %}Scan Details{% endblock %}
+
+{% block content %}
+<!-- Scan Summary -->
+<div class="row mb-4">
+    <div class="col-lg-4">
+        <div class="card" data-aos="fade-up">
+            <div class="card-body text-center">
+                <div class="scan-score-display">
+                    <svg class="score-ring" viewBox="0 0 120 120">
+                        <circle class="score-bg" cx="60" cy="60" r="54"/>
+                        <circle class="score-progress" cx="60" cy="60" r="54"
+                                stroke-dasharray="339.3" stroke-dashoffset="339.3"/>
+                    </svg>
+                    <div class="score-value">
+                        <span class="score">{{ scan.health_score }}</span>
+                        <span class="max">/100</span>
+                    </div>
+                </div>
+                <h4 class="mt-3">{{ scan.health_category }}</h4>
+                <p class="text-muted mb-0">Health Score</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-8">
+        <div class="card" data-aos="fade-up" data-aos-delay="100">
+            <div class="card-header">
+                <h5><i class='bx bx-info-circle'></i> Scan Information</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="info-item">
+                            <span class="info-label">Scan ID</span>
+                            <span class="info-value">#{{ scan.id }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Scan Type</span>
+                            <span class="info-value">{{ scan.scan_type|title }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Status</span>
+                            <span class="info-value">
+                                {% if scan.status == 'completed' %}
+                                    <span class="badge bg-success">Completed</span>
+                                {% elif scan.status == 'failed' %}
+                                    <span class="badge bg-danger">Failed</span>
+                                {% else %}
+                                    <span class="badge bg-warning">In Progress</span>
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="info-item">
+                            <span class="info-label">Started</span>
+                            <span class="info-value">{{ scan.started_at|format_datetime('%Y-%m-%d %H:%M:%S') if scan.started_at else 'N/A' }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Duration</span>
+                            <span class="info-value">{{ format_duration(scan.duration) if scan.duration else '--' }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Actions</span>
+                            <span class="info-value">
+                                {% if scan.status == 'completed' %}
+                                <a href="{{ url_for('reports.download_report', scan_id=scan.id) }}" class="btn btn-sm btn-primary">
+                                    <i class='bx bx-download'></i> Download PDF
+                                </a>
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Component Results -->
+<div class="row mb-4">
+    <!-- CPU -->
+    <div class="col-md-6 col-lg-3" data-aos="fade-up">
+        <a href="{{ url_for('diagnostics.cpu') }}" class="component-card">
+            <div class="component-icon cpu">
+                <i class='bx bx-microchip'></i>
+            </div>
+            <div class="component-info">
+                <span class="component-name">CPU</span>
+                <span class="component-value" id="resultCpu">{{ scan.get_data('cpu_data').get('usage', 0)|round(1) }}%</span>
+            </div>
+        </a>
+    </div>
+    
+    <!-- RAM -->
+    <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="50">
+        <a href="{{ url_for('diagnostics.ram') }}" class="component-card">
+            <div class="component-icon ram">
+                <i class='bx bx-memory-card'></i>
+            </div>
+            <div class="component-info">
+                <span class="component-name">Memory</span>
+                <span class="component-value" id="resultRam">{{ scan.get_data('ram_data').get('memory', {}).get('percent', 0)|round(1) }}%</span>
+            </div>
+        </a>
+    </div>
+    
+    <!-- Disk -->
+    <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="100">
+        <a href="{{ url_for('diagnostics.disk') }}" class="component-card">
+            <div class="component-icon disk">
+                <i class='bx bx-hdd'></i>
+            </div>
+            <div class="component-info">
+                <span class="component-name">Disk</span>
+                <span class="component-value" id="resultDisk">{{ scan.get_data('disk_data').get('overall_percent', 0)|round(1) }}%</span>
+            </div>
+        </a>
+    </div>
+    
+    <!-- Network -->
+    <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="150">
+        <a href="{{ url_for('diagnostics.network') }}" class="component-card">
+            <div class="component-icon network">
+                <i class='bx bx-wifi'></i>
+            </div>
+            <div class="component-info">
+                <span class="component-name">Network</span>
+                <span class="component-value" id="resultNetwork">
+                    {% if scan.get_data('network_data').get('internet_connectivity', {}).get('connected') %}
+                        Connected
+                    {% else %}
+                        Offline
+                    {% endif %}
+                </span>
+            </div>
+        </a>
+    </div>
+</div>
+
+<!-- Recommendations -->
+<div class="row">
+    <div class="col-12">
+        <div class="card" data-aos="fade-up">
+            <div class="card-header">
+                <h5><i class='bx bx-message-detail'></i> Recommendations</h5>
+            </div>
+            <div class="card-body">
+                {% set recommendations = scan.get_data('recommendations') %}
+                {% if recommendations %}
+                <div class="recommendations-grid">
+                    {% for rec in recommendations %}
+                    <div class="recommendation-card severity-{{ rec.severity }}">
+                        <div class="rec-header">
+                            <i class='bx bx-{{ 'exclamation-triangle' if rec.severity == 'critical' else 'info-circle' }}'></i>
+                            <span class="rec-title">{{ rec.title }}</span>
+                        </div>
+                        <p class="rec-description">{{ rec.description }}</p>
+                        {% if rec.action_items %}
+                        <div class="rec-actions">
+                            <strong>Suggested Actions:</strong>
+                            <ul>
+                                {% for action in rec.action_items %}
+                                <li>{{ action }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-state">
+                    <i class='bx bx-check-circle'></i>
+                    <h5>All Systems Healthy!</h5>
+                    <p>No recommendations at this time.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.component-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem;
+    background: var(--white);
+    border-radius: var(--radius-xl);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all var(--transition-base);
+}
+
+.component-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary);
+}
+
+.component-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.component-icon i {
+    font-size: 1.5rem;
+    color: white;
+}
+
+.component-icon.cpu { background: linear-gradient(135deg, #0078D4, #00bcf2); }
+.component-icon.ram { background: linear-gradient(135deg, #28a745, #34d058); }
+.component-icon.disk { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
+.component-icon.network { background: linear-gradient(135deg, #8b5cf6, #a78bfa); }
+
+.component-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.component-name {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.component-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.scan-score-display {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto;
+}
+
+.score-ring {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.score-bg {
+    fill: none;
+    stroke: var(--gray-400);
+    stroke-width: 8;
+}
+
+.score-progress {
+    fill: none;
+    stroke: var(--success);
+    stroke-width: 8;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1s ease;
+}
+
+.score-value {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.score-value .score {
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.score-value .max {
+    font-size: 1rem;
+    color: var(--text-muted);
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--gray-400);
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    color: var(--text-muted);
+}
+
+.info-value {
+    font-weight: 500;
+}
+
+.recommendations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1rem;
+}
+
+.recommendation-card {
+    padding: 1.25rem;
+    border-radius: var(--radius-lg);
+    border-left: 4px solid;
+}
+
+.recommendation-card.severity-critical {
+    background: rgba(220, 53, 69, 0.05);
+    border-color: var(--danger);
+}
+
+.recommendation-card.severity-warning {
+    background: rgba(255, 193, 7, 0.05);
+    border-color: var(--warning);
+}
+
+.recommendation-card.severity-info {
+    background: rgba(0, 120, 212, 0.05);
+    border-color: var(--primary);
+}
+
+.rec-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.rec-header i {
+    font-size: 1.25rem;
+}
+
+.severity-critical .rec-header i { color: var(--danger); }
+.severity-warning .rec-header i { color: var(--warning); }
+.severity-info .rec-header i { color: var(--primary); }
+
+.rec-title {
+    font-weight: 600;
+}
+
+.rec-description {
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+}
+
+.rec-actions {
+    font-size: 0.875rem;
+}
+
+.rec-actions ul {
+    margin: 0.5rem 0 0 1.25rem;
+    padding: 0;
+}
+
+.rec-actions li {
+    margin-bottom: 0.25rem;
+}
+
+.health-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    font-weight: 700;
+}
+
+.health-badge.score-5, .health-badge.score-4 {
+    background: rgba(40, 167, 69, 0.1);
+    color: var(--success);
+}
+
+.health-badge.score-3 {
+    background: rgba(255, 193, 7, 0.1);
+    color: var(--warning);
+}
+
+.health-badge.score-2, .health-badge.score-1, .health-badge.score-0 {
+    background: rgba(220, 53, 69, 0.1);
+    color: var(--danger);
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Animate score circle
+    const score = {{ scan.health_score }};
+    const circle = document.querySelector('.score-progress');
+    const circumference = 2 * Math.PI * 54;
+    const offset = circumference - (score / 100) * circumference;
+    
+    setTimeout(() => {
+        circle.style.strokeDashoffset = offset;
+        
+        // Set color based on score
+        let color;
+        if (score >= 80) color = '#28a745';
+        else if (score >= 60) color = '#ffc107';
+        else if (score >= 40) color = '#fd7e14';
+        else color = '#dc3545';
+        
+        circle.style.stroke = color;
+    }, 500);
+});
+</script>
+{% endblock %}

@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+
+{% block title %}Scan History - SupportSight{% endblock %}
+{% block page_title %}Scan History{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4>Scan History</h4>
+                        <p class="text-muted mb-0">View and manage your diagnostic scans</p>
+                    </div>
+                    <a href="{{ url_for('dashboard.quick_scan') }}" class="btn btn-primary">
+                        <i class='bx bx-scan'></i>
+                        New Scan
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                {% if scans %}
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Scan ID</th>
+                                <th>Date</th>
+                                <th>Type</th>
+                                <th>Health Score</th>
+                                <th>Status</th>
+                                <th>Duration</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for scan in scans %}
+                            <tr>
+                                <td>
+                                    <span class="fw-bold">#{{ scan.id }}</span>
+                                </td>
+                                <td>
+                                    {{ scan.started_at|format_datetime('%Y-%m-%d %H:%M') if scan.started_at else 'N/A' }}
+                                </td>
+                                <td>
+                                    <span class="badge bg-secondary">{{ scan.scan_type|title }}</span>
+                                </td>
+                                <td>
+                                    <span class="health-badge score-{{ scan.health_score|int // 20 }}">
+                                        {{ scan.health_score }}
+                                    </span>
+                                </td>
+                                <td>
+                                    {% if scan.status == 'completed' %}
+                                        <span class="badge bg-success">Completed</span>
+                                    {% elif scan.status == 'failed' %}
+                                        <span class="badge bg-danger">Failed</span>
+                                    {% else %}
+                                        <span class="badge bg-warning">In Progress</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {{ format_duration(scan.duration) if scan.duration else '--' }}
+                                </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a href="{{ url_for('dashboard.scan_result', scan_id=scan.id) }}" 
+                                           class="btn btn-sm btn-outline-primary">
+                                            <i class='bx bx-eye'></i>
+                                        </a>
+                                        {% if scan.status == 'completed' %}
+                                        <a href="{{ url_for('reports.download_report', scan_id=scan.id) }}" 
+                                           class="btn btn-sm btn-outline-secondary">
+                                            <i class='bx bx-download'></i>
+                                        </a>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                {% if pages > 1 %}
+                <nav class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        {% if has_prev %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('dashboard.scan_history', page=page-1) }}">
+                                <i class='bx bx-chevron-left'></i>
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% for p in range(1, pages + 1) %}
+                            {% if p >= page - 2 and p <= page + 2 %}
+                                <li class="page-item {% if p == page %}active{% endif %}">
+                                    <a class="page-link" href="{{ url_for('dashboard.scan_history', page=p) }}">{{ p }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('dashboard.scan_history', page=page+1) }}">
+                                <i class='bx bx-chevron-right'></i>
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+
+                {% else %}
+                <div class="empty-state">
+                    <i class='bx bx-history'></i>
+                    <h5>No Scans Yet</h5>
+                    <p>Run your first diagnostic scan to see results here.</p>
+                    <a href="{{ url_for('dashboard.quick_scan') }}" class="btn btn-primary">
+                        <i class='bx bx-scan'></i>
+                        Run First Scan
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,59 @@
+<nav class="top-navbar">
+    <div class="navbar-left">
+        <button class="btn-icon d-none d-lg-flex" id="desktopSidebarToggle" title="Toggle Sidebar">
+            <i class='bx bx-sidebar'></i>
+        </button>
+        <button class="mobile-sidebar-toggle" id="mobileSidebarToggle" title="Toggle Navigation">
+            <i class='bx bx-menu'></i>
+        </button>
+        <div class="page-title ms-2">
+            <h1>{% block page_title %}Dashboard{% endblock %}</h1>
+        </div>
+    </div>
+    
+    <div class="navbar-right">
+        <div class="navbar-actions">
+            <button class="btn-icon" id="refreshData" title="Refresh Data">
+                <i class='bx bx-refresh'></i>
+            </button>
+            <a href="{{ url_for('dashboard.quick_scan') }}" class="btn btn-primary btn-sm">
+                <i class='bx bx-scan'></i>
+                <span>New Scan</span>
+            </a>
+        </div>
+        
+        <div class="navbar-user dropdown">
+            <button class="user-toggle dropdown-toggle" data-bs-toggle="dropdown">
+                <div class="user-avatar">
+                    {{ current_user.initials }}
+                </div>
+                <div class="user-info">
+                    <span class="user-name">{{ current_user.full_name }}</span>
+                    <span class="user-role">{{ current_user.role }}</span>
+                </div>
+                <i class='bx bx-chevron-down'></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                    <a class="dropdown-item" href="{{ url_for('auth.profile') }}">
+                        <i class='bx bx-user'></i>
+                        <span>Profile</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="{{ url_for('dashboard.scan_history') }}">
+                        <i class='bx bx-history'></i>
+                        <span>Scan History</span>
+                    </a>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <a class="dropdown-item" href="{{ url_for('auth.logout') }}">
+                        <i class='bx bx-log-out'></i>
+                        <span>Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

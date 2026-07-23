@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block title %}Processes - SupportSight{% endblock %}
+{% block page_title %}Running Processes{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-center" data-aos="fade-up">
+            <div class="card-body">
+                <div class="stat-value">{{ counts.total|default(0) }}</div>
+                <div class="stat-label">Total Processes</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center" data-aos="fade-up" data-aos-delay="100">
+            <div class="card-body">
+                <div class="stat-value">{{ counts.running|default(0) }}</div>
+                <div class="stat-label">Running</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center" data-aos="fade-up" data-aos-delay="200">
+            <div class="card-body">
+                <div class="stat-value">{{ zombies|length }}</div>
+                <div class="stat-label">Zombie Processes</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card" data-aos="fade-up">
+            <div class="card-header">
+                <h5><i class='bx bx-list-ul'></i> Top Processes by CPU</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>PID</th>
+                                <th>Name</th>
+                                <th>CPU %</th>
+                                <th>Memory %</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for proc in (processes.top_cpu or [])[:20] %}
+                            <tr>
+                                <td>{{ proc.pid }}</td>
+                                <td>{{ proc.name }}</td>
+                                <td>{{ proc.cpu_percent|default(0)|round(1) }}%</td>
+                                <td>{{ proc.memory_percent|default(0)|round(1) }}%</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card" data-aos="fade-up">
+            <div class="card-header">
+                <h5><i class='bx bx-list-ul'></i> Top Processes by Memory</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>PID</th>
+                                <th>Name</th>
+                                <th>Memory (MB)</th>
+                                <th>Memory %</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for proc in (processes.top_memory or [])[:20] %}
+                            <tr>
+                                <td>{{ proc.pid }}</td>
+                                <td>{{ proc.name }}</td>
+                                <td>{{ proc.memory_mb|default(0)|round(1) }}</td>
+                                <td>{{ proc.memory_percent|default(0)|round(1) }}%</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}Reports - SupportSight{% endblock %}
+{% block page_title %}Download Reports{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card" data-aos="fade-up">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4>PDF Reports</h4>
+                        <p class="text-muted mb-0">Download comprehensive diagnostic reports</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card" data-aos="fade-up">
+            <div class="card-body">
+                {% if scans %}
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Scan ID</th>
+                                <th>Date</th>
+                                <th>Health Score</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for scan in scans %}
+                            <tr>
+                                <td><strong>#{{ scan.id }}</strong></td>
+                                <td>{{ scan.started_at|format_datetime('%Y-%m-%d %H:%M') if scan.started_at else 'N/A' }}</td>
+                                <td>
+                                    <span class="health-badge score-{{ scan.health_score|int // 20 }}">
+                                        {{ scan.health_score }}
+                                    </span>
+                                </td>
+                                <td>
+                                    {% if scan.status == 'completed' %}
+                                        <span class="badge bg-success">Ready</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Pending</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if scan.status == 'completed' %}
+                                    <a href="{{ url_for('reports.download_report', scan_id=scan.id) }}" class="btn btn-sm btn-primary">
+                                        <i class='bx bx-download'></i> Download
+                                    </a>
+                                    {% else %}
+                                    <button class="btn btn-sm btn-secondary" disabled>
+                                        <i class='bx bx-loader'></i> Processing
+                                    </button>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="empty-state">
+                    <i class='bx bx-file'></i>
+                    <h5>No Reports Available</h5>
+                    <p>Complete a scan to generate your first report.</p>
+                    <a href="{{ url_for('dashboard.quick_scan') }}" class="btn btn-primary">
+                        <i class='bx bx-scan'></i> Run Scan
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

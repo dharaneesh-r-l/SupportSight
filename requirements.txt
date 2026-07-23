@@ -1,0 +1,46 @@
+# SupportSight - AI-Powered Windows Diagnostics & IT Support Platform
+# Core Dependencies
+
+# Web Framework
+Flask==3.0.0
+Flask-SQLAlchemy==3.1.1
+Flask-Login==0.6.3
+Flask-Bcrypt==1.0.1
+Flask-Migrate==4.0.5
+
+# Database
+SQLAlchemy==2.0.23
+Werkzeug==3.0.1
+
+# System Diagnostics
+psutil==5.9.6
+
+# PDF Report Generation
+reportlab==4.0.7
+Pillow==10.1.0
+
+# HTTP Requests
+requests==2.31.0
+
+# Windows-specific (optional - for full functionality on Windows)
+# wmi==1.5.1
+# pywin32==306
+
+# Development & Testing
+python-dotenv==1.0.0
+pytest==7.4.3
+pytest-cov==4.1.0
+
+# Code Quality
+black==23.12.1
+flake8==6.1.0
+isort==5.13.2
+
+# Production Server
+gunicorn==21.2.0
+
+# Logging
+coloredlogs==15.0.1
+
+# Utilities
+click==8.1.7

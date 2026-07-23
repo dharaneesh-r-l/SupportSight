@@ -1,0 +1,339 @@
+"""
+SupportSight System Information Service
+
+Collects and provides general Windows system information.
+"""
+
+import platform
+import socket
+import os
+from typing import Dict, Any, Optional
+
+try:
+    import psutil
+    PSUTIL_AVAILABLE = True
+except ImportError:
+    PSUTIL_AVAILABLE = False
+
+
+class SystemInfoService:
+    """
+    Service for collecting general system information.
+
+    Provides detailed information about the operating system,
+    computer hardware, and system configuration.
+    """
+
+    @classmethod
+    def get_computer_name(cls) -> str:
+        """Get the computer name."""
+        return socket.gethostname()
+
+    @classmethod
+    def get_username(cls) -> str:
+        """Get the current username."""
+        return os.environ.get('USERNAME', os.environ.get('USER', 'Unknown'))
+
+    @classmethod
+    def get_platform_info(cls) -> Dict[str, str]:
+        """
+        Get platform information.
+
+        Returns:
+            Dictionary with platform details
+        """
+        return {
+            'system': platform.system(),
+            'release': platform.release(),
+            'version': platform.version(),
+            'architecture': platform.machine(),
+            'processor': platform.processor(),
+            'node': platform.node()
+        }
+
+    @classmethod
+    def get_windows_version(cls) -> Dict[str, str]:
+        """
+        Get Windows version information.
+
+        Returns:
+            Dictionary with Windows version details
+        """
+        if platform.system() != 'Windows':
+            return {
+                'name': 'Non-Windows System',
+                'version': platform.version(),
+                'build': ''
+            }
+
+        try:
+            import winreg
+            registry = winreg.ConnectRegistry(None, winreg.HKEY_LOCAL_MACHINE)
+            key = winreg.OpenKey(registry, r'SOFTWARE\Microsoft\Windows NT\CurrentVersion')
+            
+            version_info = {}
+            try:
+                version_info['name'] = winreg.QueryValueEx(key, 'ProductName')[0]
+            except FileNotFoundError:
+                version_info['name'] = 'Windows'
+
+            try:
+                version_info['version'] = winreg.QueryValueEx(key, 'CurrentVersion')[0]
+            except FileNotFoundError:
+                version_info['version'] = ''
+
+            try:
+                version_info['build'] = winreg.QueryValueEx(key, 'CurrentBuild')[0]
+            except FileNotFoundError:
+                version_info['build'] = ''
+
+            try:
+                version_info['display_version'] = winreg.QueryValueEx(key, 'DisplayVersion')[0]
+            except FileNotFoundError:
+                version_info['display_version'] = ''
+
+            try:
+                version_info['edition'] = winreg.QueryValueEx(key, 'EditionID')[0]
+            except FileNotFoundError:
+                version_info['edition'] = ''
+
+            winreg.CloseKey(key)
+            winreg.CloseKey(registry)
+
+            return version_info
+        except Exception:
+            return {
+                'name': 'Windows',
+                'version': platform.release(),
+                'build': ''
+            }
+
+    @classmethod
+    def get_boot_time(cls) -> Optional[str]:
+        """
+        Get system boot time.
+
+        Returns:
+            Boot time as ISO formatted string or None
+        """
+        if not PSUTIL_AVAILABLE:
+            return None
+
+        try:
+            boot_time = psutil.boot_time()
+            from datetime import datetime
+            return datetime.fromtimestamp(boot_time).isoformat()
+        except Exception:
+            return None
+
+    @classmethod
+    def get_uptime(cls) -> Dict[str, Any]:
+        """
+        Get system uptime.
+
+        Returns:
+            Dictionary with uptime information
+        """
+        if not PSUTIL_AVAILABLE:
+            return {'days': 0, 'hours': 0, 'minutes': 0, 'seconds': 0, 'total_seconds': 0}
+
+        try:
+            boot_time = psutil.boot_time()
+            import time
+            uptime_seconds = time.time() - boot_time
+
+            days = int(uptime_seconds // 86400)
+            hours = int((uptime_seconds % 86400) // 3600)
+            minutes = int((uptime_seconds % 3600) // 60)
+            seconds = int(uptime_seconds % 60)
+
+            return {
+                'days': days,
+                'hours': hours,
+                'minutes': minutes,
+                'seconds': seconds,
+                'total_seconds': uptime_seconds
+            }
+        except Exception:
+            return {'days': 0, 'hours': 0, 'minutes': 0, 'seconds': 0, 'total_seconds': 0}
+
+    @classmethod
+    def get_platform_system(cls) -> str:
+        """
+        Get the platform system name.
+
+        Returns:
+            Platform system name
+        """
+        return platform.system()
+
+    @classmethod
+    def is_windows(cls) -> bool:
+        """Check if running on Windows."""
+        return platform.system() == 'Windows'
+
+    @classmethod
+    def is_linux(cls) -> bool:
+        """Check if running on Linux."""
+        return platform.system() == 'Linux'
+
+    @classmethod
+    def is_mac(cls) -> bool:
+        """Check if running on macOS."""
+        return platform.system() == 'Darwin'
+
+    @classmethod
+    def get_system_info(cls) -> Dict[str, Any]:
+        """
+        Get comprehensive system information.
+
+        Returns:
+            Dictionary with all system information
+        """
+        info = {
+            'computer_name': cls.get_computer_name(),
+            'username': cls.get_username(),
+            'platform': cls.get_platform_info(),
+            'boot_time': cls.get_boot_time(),
+            'uptime': cls.get_uptime()
+        }
+
+        # Add Windows-specific info if applicable
+        if cls.is_windows():
+            info['windows_version'] = cls.get_windows_version()
+
+        # Add CPU info
+        info['cpu'] = cls.get_cpu_info()
+
+        # Add memory info
+        info['memory'] = cls.get_memory_info()
+
+        return info
+
+    @classmethod
+    def get_cpu_info(cls) -> Dict[str, Any]:
+        """
+        Get basic CPU information.
+
+        Returns:
+            Dictionary with CPU details
+        """
+        if not PSUTIL_AVAILABLE:
+            return {
+                'processor': platform.processor(),
+                'architecture': platform.machine(),
+                'physical_cores': 'N/A',
+                'logical_cores': 'N/A'
+            }
+
+        try:
+            return {
+                'processor': platform.processor() or 'Unknown',
+                'architecture': platform.machine(),
+                'physical_cores': psutil.cpu_count(logical=False),
+                'logical_cores': psutil.cpu_count(logical=True),
+                'max_frequency': psutil.cpu_freq().max if psutil.cpu_freq() else None,
+                'min_frequency': psutil.cpu_freq().min if psutil.cpu_freq() else None
+            }
+        except Exception:
+            return {
+                'processor': platform.processor(),
+                'architecture': platform.machine()
+            }
+
+    @classmethod
+    def get_memory_info(cls) -> Dict[str, Any]:
+        """
+        Get basic memory information.
+
+        Returns:
+            Dictionary with memory details
+        """
+        if not PSUTIL_AVAILABLE:
+            return {
+                'total': 0,
+                'available': 0
+            }
+
+        try:
+            memory = psutil.virtual_memory()
+            return {
+                'total': memory.total,
+                'available': memory.available,
+                'percent': memory.percent
+            }
+        except Exception:
+            return {'total': 0, 'available': 0}
+
+    @classmethod
+    def get_motherboard_info(cls) -> Dict[str, str]:
+        """
+        Get motherboard information (Windows only).
+
+        Returns:
+            Dictionary with motherboard details
+        """
+        if not cls.is_windows():
+            return {'manufacturer': 'N/A', 'product': 'N/A'}
+
+        try:
+            import winreg
+            registry = winreg.ConnectRegistry(None, winreg.HKEY_LOCAL_MACHINE)
+            key = winreg.OpenKey(registry, r'SYSTEM\CurrentControlSet\Control\SystemInformation')
+
+            info = {}
+            try:
+                info['manufacturer'] = winreg.QueryValueEx(key, 'SystemManufacturer')[0]
+            except FileNotFoundError:
+                info['manufacturer'] = 'Unknown'
+
+            try:
+                info['product'] = winreg.QueryValueEx(key, 'SystemProductName')[0]
+            except FileNotFoundError:
+                info['product'] = 'Unknown'
+
+            winreg.CloseKey(key)
+            winreg.CloseKey(registry)
+
+            return info
+        except Exception:
+            return {'manufacturer': 'Unknown', 'product': 'Unknown'}
+
+    @classmethod
+    def get_bios_info(cls) -> Dict[str, str]:
+        """
+        Get BIOS information (Windows only).
+
+        Returns:
+            Dictionary with BIOS details
+        """
+        if not cls.is_windows():
+            return {'vendor': 'N/A', 'version': 'N/A', 'date': 'N/A'}
+
+        try:
+            import winreg
+            registry = winreg.ConnectRegistry(None, winreg.HKEY_LOCAL_MACHINE)
+            key = winreg.OpenKey(registry, r'HARDWARE\DESCRIPTION\System\BIOS')
+
+            info = {}
+            try:
+                info['vendor'] = winreg.QueryValueEx(key, 'BIOSVendor')[0]
+            except FileNotFoundError:
+                info['vendor'] = 'Unknown'
+
+            try:
+                info['version'] = winreg.QueryValueEx(key, 'BIOSVersion')[0]
+            except FileNotFoundError:
+                info['version'] = 'Unknown'
+
+            try:
+                info['date'] = winreg.QueryValueEx(key, 'BIOSReleaseDate')[0]
+            except FileNotFoundError:
+                info['date'] = 'Unknown'
+
+            winreg.CloseKey(key)
+            winreg.CloseKey(registry)
+
+            return info
+        except Exception:
+            return {'vendor': 'Unknown', 'version': 'Unknown', 'date': 'Unknown'}

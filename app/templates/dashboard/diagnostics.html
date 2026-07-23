@@ -1,0 +1,237 @@
+{% extends 'base.html' %}
+
+{% block title %}Diagnostics - SupportSight{% endblock %}
+{% block page_title %}System Diagnostics{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4>Comprehensive System Analysis</h4>
+                        <p class="text-muted mb-0">Real-time monitoring of all system components</p>
+                    </div>
+                    <a href="{{ url_for('dashboard.quick_scan') }}" class="btn btn-primary">
+                        <i class='bx bx-scan'></i>
+                        Run Full Scan
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Diagnostic Cards Grid -->
+<div class="row">
+    <!-- CPU -->
+    <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up">
+        <a href="{{ url_for('diagnostics.cpu') }}" class="diagnostic-card">
+            <div class="diagnostic-icon cpu">
+                <i class='bx bx-microchip'></i>
+            </div>
+            <div class="diagnostic-info">
+                <h5>CPU</h5>
+                <p class="diagnostic-value" id="diagCpu">--</p>
+                <span class="diagnostic-label">Processor Usage</span>
+            </div>
+            <div class="diagnostic-status" id="diagCpuStatus">
+                <span class="badge">Loading</span>
+            </div>
+        </a>
+    </div>
+    
+    <!-- RAM -->
+    <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="50">
+        <a href="{{ url_for('diagnostics.ram') }}" class="diagnostic-card">
+            <div class="diagnostic-icon ram">
+                <i class='bx bx-memory-card'></i>
+            </div>
+            <div class="diagnostic-info">
+                <h5>Memory</h5>
+                <p class="diagnostic-value" id="diagRam">--</p>
+                <span class="diagnostic-label">RAM Usage</span>
+            </div>
+            <div class="diagnostic-status" id="diagRamStatus">
+                <span class="badge">Loading</span>
+            </div>
+        </a>
+    </div>
+    
+    <!-- Disk -->
+    <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="100">
+        <a href="{{ url_for('diagnostics.disk') }}" class="diagnostic-card">
+            <div class="diagnostic-icon disk">
+                <i class='bx bx-hdd'></i>
+            </div>
+            <div class="diagnostic-info">
+                <h5>Storage</h5>
+                <p class="diagnostic-value" id="diagDisk">--</p>
+                <span class="diagnostic-label">Disk Usage</span>
+            </div>
+            <div class="diagnostic-status" id="diagDiskStatus">
+                <span class="badge">Loading</span>
+            </div>
+        </a>
+    </div>
+    
+    <!-- Network -->
+    <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="150">
+        <a href="{{ url_for('diagnostics.network') }}" class="diagnostic-card">
+            <div class="diagnostic-icon network">
+                <i class='bx bx-wifi'></i>
+            </div>
+            <div class="diagnostic-info">
+                <h5>Network</h5>
+                <p class="diagnostic-value" id="diagNetwork">--</p>
+                <span class="diagnostic-label">Connection Status</span>
+            </div>
+            <div class="diagnostic-status" id="diagNetworkStatus">
+                <span class="badge">Loading</span>
+            </div>
+        </a>
+    </div>
+    
+    <!-- Battery -->
+    <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+        <a href="{{ url_for('diagnostics.battery') }}" class="diagnostic-card">
+            <div class="diagnostic-icon battery">
+                <i class='bx bx-battery'></i>
+            </div>
+            <div class="diagnostic-info">
+                <h5>Battery</h5>
+                <p class="diagnostic-value" id="diagBattery">--</p>
+                <span class="diagnostic-label">Battery Status</span>
+            </div>
+            <div class="diagnostic-status" id="diagBatteryStatus">
+                <span class="badge">Loading</span>
+            </div>
+        </a>
+    </div>
+    
+    <!-- Processes -->
+    <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="250">
+        <a href="{{ url_for('diagnostics.processes') }}" class="diagnostic-card">
+            <div class="diagnostic-icon processes">
+                <i class='bx bx-list-ul'></i>
+            </div>
+            <div class="diagnostic-info">
+                <h5>Processes</h5>
+                <p class="diagnostic-value" id="diagProcesses">--</p>
+                <span class="diagnostic-label">Running Tasks</span>
+            </div>
+            <div class="diagnostic-status" id="diagProcessesStatus">
+                <span class="badge">Loading</span>
+            </div>
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    loadDiagnosticData();
+    setInterval(loadDiagnosticData, 10000);
+});
+
+async function loadDiagnosticData() {
+    try {
+        const response = await fetch('/api/status');
+        const data = await response.json();
+        
+        // CPU
+        if (data.cpu) {
+            const cpu = data.cpu.usage.toFixed(1);
+            document.getElementById('diagCpu').textContent = cpu + '%';
+            updateStatus('diagCpuStatus', cpu, 85, 70);
+        }
+        
+        // RAM
+        if (data.ram) {
+            const ram = data.ram.percent.toFixed(1);
+            document.getElementById('diagRam').textContent = ram + '%';
+            updateStatus('diagRamStatus', ram, 90, 75);
+        }
+        
+        // Disk
+        if (data.disk && data.disk.overall_percent !== undefined) {
+            const disk = data.disk.overall_percent.toFixed(1);
+            document.getElementById('diagDisk').textContent = disk + '%';
+            updateStatus('diagDiskStatus', disk, 90, 80);
+        }
+        
+        // Network
+        if (data.network) {
+            const status = data.network.connected ? 'Connected' : 'Offline';
+            document.getElementById('diagNetwork').textContent = status;
+            const statusEl = document.getElementById('diagNetworkStatus');
+            statusEl.innerHTML = `<span class="badge bg-${data.network.connected ? 'success' : 'danger'}">${status}</span>`;
+        }
+        
+        // Battery
+        if (data.battery) {
+            const battery = data.battery;
+            if (battery.has_battery) {
+                const status = battery.is_charging ? 'Charging' : battery.percent + '%';
+                document.getElementById('diagBattery').textContent = status;
+                updateBatteryStatus('diagBatteryStatus', battery.percent, battery.is_charging);
+            } else {
+                document.getElementById('diagBattery').textContent = 'N/A';
+                document.getElementById('diagBatteryStatus').innerHTML = '<span class="badge bg-secondary">Desktop</span>';
+            }
+        }
+        
+        // Processes
+        const procResponse = await fetch('/api/processes?limit=1');
+        const procData = await procResponse.json();
+        if (procData.processes) {
+            document.getElementById('diagProcesses').textContent = procData.processes.length + '+';
+            document.getElementById('diagProcessesStatus').innerHTML = '<span class="badge bg-info">Active</span>';
+        }
+    } catch (error) {
+        console.error('Error loading diagnostic data:', error);
+    }
+}
+
+function updateStatus(elementId, value, critical, warning) {
+    const el = document.getElementById(elementId);
+    let color, text;
+    
+    if (value >= critical) {
+        color = 'danger';
+        text = 'Critical';
+    } else if (value >= warning) {
+        color = 'warning';
+        text = 'Warning';
+    } else {
+        color = 'success';
+        text = 'Healthy';
+    }
+    
+    el.innerHTML = `<span class="badge bg-${color}">${text}</span>`;
+}
+
+function updateBatteryStatus(elementId, percent, charging) {
+    const el = document.getElementById(elementId);
+    let color, text;
+    
+    if (charging) {
+        color = 'info';
+        text = 'Charging';
+    } else if (percent <= 15) {
+        color = 'danger';
+        text = 'Low';
+    } else if (percent <= 30) {
+        color = 'warning';
+        text = 'Medium';
+    } else {
+        color = 'success';
+        text = 'Good';
+    }
+    
+    el.innerHTML = `<span class="badge bg-${color}">${text}</span>`;
+}
+</script>
+{% endblock %}

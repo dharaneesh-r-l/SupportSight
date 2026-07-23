@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+
+{% block title %}System Information - SupportSight{% endblock %}
+{% block page_title %}System Information{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card mb-4" data-aos="fade-up">
+            <div class="card-header">
+                <h5><i class='bx bx-info-circle'></i> Computer Information</h5>
+            </div>
+            <div class="card-body">
+                <div class="info-row">
+                    <div class="info-label">Computer Name</div>
+                    <div class="info-value">{{ system.computer_name }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Username</div>
+                    <div class="info-value">{{ system.username }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Platform</div>
+                    <div class="info-value">{{ system.platform.system }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Release</div>
+                    <div class="info-value">{{ system.platform.release }}</div>
+                </div>
+                {% if system.windows_version %}
+                <div class="info-row">
+                    <div class="info-label">Windows Edition</div>
+                    <div class="info-value">{{ system.windows_version.name }} {{ system.windows_version.edition }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Build</div>
+                    <div class="info-value">{{ system.windows_version.build }}</div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="card" data-aos="fade-up" data-aos-delay="100">
+            <div class="card-header">
+                <h5><i class='bx bx-cpu'></i> Processor</h5>
+            </div>
+            <div class="card-body">
+                <div class="info-row">
+                    <div class="info-label">Processor</div>
+                    <div class="info-value">{{ system.cpu.processor }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Architecture</div>
+                    <div class="info-value">{{ system.cpu.architecture }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Physical Cores</div>
+                    <div class="info-value">{{ system.cpu.physical_cores }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Logical Cores</div>
+                    <div class="info-value">{{ system.cpu.logical_cores }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-6">
+        <div class="card mb-4" data-aos="fade-up">
+            <div class="card-header">
+                <h5><i class='bx bx-memory-card'></i> Memory</h5>
+            </div>
+            <div class="card-body">
+                <div class="info-row">
+                    <div class="info-label">Total RAM</div>
+                    <div class="info-value">{{ system.memory.total|format_bytes }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Available</div>
+                    <div class="info-value">{{ system.memory.available|format_bytes }}</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card" data-aos="fade-up" data-aos-delay="100">
+            <div class="card-header">
+                <h5><i class='bx bx-timer'></i> Uptime</h5>
+            </div>
+            <div class="card-body">
+                {% if system.uptime.days > 0 %}
+                <div class="uptime-display">
+                    <span class="uptime-value">{{ system.uptime.days }}</span>
+                    <span class="uptime-label">days</span>
+                    <span class="uptime-value">{{ system.uptime.hours }}</span>
+                    <span class="uptime-label">hours</span>
+                    <span class="uptime-value">{{ system.uptime.minutes }}</span>
+                    <span class="uptime-label">min</span>
+                </div>
+                {% else %}
+                <div class="uptime-display">
+                    <span class="uptime-value">{{ system.uptime.hours }}</span>
+                    <span class="uptime-label">hours</span>
+                    <span class="uptime-value">{{ system.uptime.minutes }}</span>
+                    <span class="uptime-label">min</span>
+                    <span class="uptime-value">{{ system.uptime.seconds }}</span>
+                    <span class="uptime-label">sec</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.uptime-display {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.uptime-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.uptime-label {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+</style>
+{% endblock %}

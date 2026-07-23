@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile - SupportSight{% endblock %}
+{% block page_title %}Profile{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card profile-card" data-aos="fade-up">
+            <div class="card-body text-center">
+                <div class="profile-avatar">
+                    {{ user.initials }}
+                </div>
+                <h3 class="profile-name">{{ user.full_name }}</h3>
+                <p class="profile-role">{{ user.role|title }}</p>
+                
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <span class="stat-value">{{ user.scan_history.count() }}</span>
+                        <span class="stat-label">Scans</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">{{ user.created_at.strftime('%b %d') if user.created_at else 'N/A' }}</span>
+                        <span class="stat-label">Joined</span>
+                    </div>
+                </div>
+                
+                <a href="{{ url_for('auth.change_password') }}" class="btn btn-outline-primary btn-sm">
+                    <i class='bx bx-key'></i>
+                    Change Password
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-8">
+        <div class="card" data-aos="fade-up" data-aos-delay="100">
+            <div class="card-header">
+                <h5><i class='bx bx-user'></i> Account Information</h5>
+            </div>
+            <div class="card-body">
+                <div class="info-row">
+                    <div class="info-label">Username</div>
+                    <div class="info-value">{{ user.username }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Email</div>
+                    <div class="info-value">{{ user.email }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">First Name</div>
+                    <div class="info-value">{{ user.first_name or 'Not set' }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Last Name</div>
+                    <div class="info-value">{{ user.last_name or 'Not set' }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Role</div>
+                    <div class="info-value">{{ user.role|title }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Account Status</div>
+                    <div class="info-value">
+                        <span class="badge bg-{{ 'success' if user.is_active else 'danger' }}">
+                            {{ 'Active' if user.is_active else 'Inactive' }}
+                        </span>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Member Since</div>
+                    <div class="info-value">{{ user.created_at.strftime('%B %d, %Y') if user.created_at else 'N/A' }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Last Login</div>
+                    <div class="info-value">{{ user.last_login.strftime('%B %d, %Y %H:%M') if user.last_login else 'Never' }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
