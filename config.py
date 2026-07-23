@@ -86,13 +86,10 @@ class ProductionConfig(Config):
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = 'Lax'
 
-    # Use environment variable for secret key in production
-    @property
-    def SECRET_KEY(self):
-        key = os.environ.get('SECRET_KEY')
-        if not key:
-            raise ValueError("SECRET_KEY environment variable must be set in production")
-        return key
+    # Read SECRET_KEY from environment variable at class definition time
+    # (Flask's from_object() reads class attributes, not properties)
+    SECRET_KEY = os.environ.get('SECRET_KEY') or 'render-default-change-me-in-dashboard'
+
 
 
 class TestingConfig(Config):
