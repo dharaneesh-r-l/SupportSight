@@ -1,24 +1,25 @@
 """
 SupportSight Reports Routes
 
-PDF report generation and download.
+PDF report generation and download. No login required.
 """
 
 import os
 from flask import render_template, redirect, url_for, flash, send_file, request
-from flask_login import login_required, current_user
+from flask_login import current_user
 from app.reports import reports_bp
 from app.services.reports_service import ReportsService
 from app.services.scan_service import ScanService
 
+_GUEST_USER_ID = 0
+
 
 @reports_bp.route('/report/<int:scan_id>')
-@login_required
 def view_report(scan_id):
     """View report details."""
     scan = ScanService.get_scan_by_id(scan_id)
 
-    if not scan or scan.user_id != current_user.id:
+    if not scan:
         flash('Report not found.', 'warning')
         return redirect(url_for('dashboard.scan_history'))
 
@@ -26,12 +27,11 @@ def view_report(scan_id):
 
 
 @reports_bp.route('/report/<int:scan_id>/download')
-@login_required
 def download_report(scan_id):
     """Download PDF report."""
     scan = ScanService.get_scan_by_id(scan_id)
 
-    if not scan or scan.user_id != current_user.id:
+    if not scan:
         flash('Report not found.', 'warning')
         return redirect(url_for('dashboard.scan_history'))
 
@@ -39,7 +39,6 @@ def download_report(scan_id):
         flash('Report not available. Scan may have failed.', 'warning')
         return redirect(url_for('dashboard.scan_result', scan_id=scan_id))
 
-    # Generate PDF
     filename = ReportsService.get_report_filename(scan)
     pdf_path = ReportsService.generate_pdf_report(scan)
 
@@ -56,12 +55,10 @@ def download_report(scan_id):
 
 
 @reports_bp.route('/reports')
-@login_required
 def all_reports():
     """List all downloadable reports."""
+    uid = current_user.id if current_user and current_user.is_authenticated else _GUEST_USER_ID
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 20, type=int)
-
-    history = ScanService.get_scan_history(current_user.id, page, per_page)
-
+    history = ScanService.get_scan_history(uid, page, per_page)
     return render_template('dashboard/reports.html', **history)

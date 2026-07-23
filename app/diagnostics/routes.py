@@ -5,7 +5,6 @@ Detailed diagnostic pages for each system component.
 """
 
 from flask import render_template, jsonify
-from flask_login import login_required, current_user
 from app.diagnostics import diagnostics_bp
 from app.services.cpu_service import CPUService
 from app.services.ram_service import RAMService
@@ -16,7 +15,6 @@ from app.services.process_service import ProcessService
 
 
 @diagnostics_bp.route('/cpu')
-@login_required
 def cpu():
     """CPU diagnostics page."""
     CPUService.record_usage()
@@ -31,7 +29,6 @@ def cpu():
 
 
 @diagnostics_bp.route('/ram')
-@login_required
 def ram():
     """RAM diagnostics page."""
     RAMService.record_usage()
@@ -46,7 +43,6 @@ def ram():
 
 
 @diagnostics_bp.route('/disk')
-@login_required
 def disk():
     """Disk diagnostics page."""
     disk_data = DiskService.get_disk_info()
@@ -58,7 +54,6 @@ def disk():
 
 
 @diagnostics_bp.route('/network')
-@login_required
 def network():
     """Network diagnostics page."""
     network_data = NetworkService.get_network_info()
@@ -70,7 +65,6 @@ def network():
 
 
 @diagnostics_bp.route('/battery')
-@login_required
 def battery():
     """Battery diagnostics page."""
     battery_data = BatteryService.get_battery_info()
@@ -82,7 +76,6 @@ def battery():
 
 
 @diagnostics_bp.route('/processes')
-@login_required
 def processes():
     """Processes page."""
     process_data = ProcessService.get_process_info()
@@ -96,7 +89,6 @@ def processes():
 
 
 @diagnostics_bp.route('/system')
-@login_required
 def system():
     """System information page."""
     from app.services.system_info import SystemInfoService

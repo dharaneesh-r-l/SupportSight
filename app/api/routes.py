@@ -1,11 +1,11 @@
 """
 SupportSight API Routes
 
-REST API endpoints for system diagnostics.
+REST API endpoints for system diagnostics. No login required.
 """
 
 from flask import jsonify, request
-from flask_login import login_required, current_user
+from flask_login import current_user
 from app.api import api_bp
 from app.services.system_info import SystemInfoService
 from app.services.cpu_service import CPUService
@@ -19,9 +19,17 @@ from app.services.scan_service import ScanService
 from app.services.root_cause_service import RootCauseAnalysisService
 from app.models.scan import Scan
 
+_GUEST_USER_ID = 0
+
+
+def _active_user_id():
+    """Return logged-in user ID or guest placeholder."""
+    if current_user and current_user.is_authenticated:
+        return current_user.id
+    return _GUEST_USER_ID
+
 
 @api_bp.route('/system')
-@login_required
 def get_system_info():
     """Get comprehensive system information."""
     data = SystemInfoService.get_system_info()
@@ -29,7 +37,6 @@ def get_system_info():
 
 
 @api_bp.route('/cpu')
-@login_required
 def get_cpu():
     """Get CPU diagnostics."""
     CPUService.record_usage()
@@ -38,7 +45,6 @@ def get_cpu():
 
 
 @api_bp.route('/cpu/history')
-@login_required
 def get_cpu_history():
     """Get CPU usage history."""
     points = request.args.get('points', 60, type=int)
@@ -47,7 +53,6 @@ def get_cpu_history():
 
 
 @api_bp.route('/ram')
-@login_required
 def get_ram():
     """Get RAM diagnostics."""
     RAMService.record_usage()
@@ -56,7 +61,6 @@ def get_ram():
 
 
 @api_bp.route('/ram/history')
-@login_required
 def get_ram_history():
     """Get RAM usage history."""
     points = request.args.get('points', 60, type=int)
@@ -65,7 +69,6 @@ def get_ram_history():
 
 
 @api_bp.route('/disk')
-@login_required
 def get_disk():
     """Get disk diagnostics."""
     data = DiskService.get_disk_info()
@@ -73,7 +76,6 @@ def get_disk():
 
 
 @api_bp.route('/network')
-@login_required
 def get_network():
     """Get network diagnostics."""
     data = NetworkService.get_network_info()
@@ -81,7 +83,6 @@ def get_network():
 
 
 @api_bp.route('/network/ping')
-@login_required
 def ping_host():
     """Ping a host."""
     host = request.args.get('host', '8.8.8.8')
@@ -91,7 +92,6 @@ def ping_host():
 
 
 @api_bp.route('/battery')
-@login_required
 def get_battery():
     """Get battery diagnostics."""
     data = BatteryService.get_battery_info()
@@ -99,7 +99,6 @@ def get_battery():
 
 
 @api_bp.route('/processes')
-@login_required
 def get_processes():
     """Get running processes."""
     limit = request.args.get('limit', 50, type=int)
@@ -117,7 +116,6 @@ def get_processes():
 
 
 @api_bp.route('/health')
-@login_required
 def get_health():
     """Get overall health score."""
     data = HealthScoreService.get_overall_health()
@@ -125,7 +123,6 @@ def get_health():
 
 
 @api_bp.route('/status')
-@login_required
 def get_quick_status():
     """Get quick system status."""
     data = ScanService.get_quick_status()
@@ -133,24 +130,21 @@ def get_quick_status():
 
 
 @api_bp.route('/root-cause')
-@login_required
 def get_root_cause_analysis():
     """Get AI root cause analysis for current live system diagnostics."""
     status_data = ScanService.get_quick_status()
-    # Add top processes to snapshot
     status_data['processes'] = ProcessService.get_top_cpu_processes(10)
     analysis = RootCauseAnalysisService.analyze_system(status_data)
     return jsonify(analysis)
 
 
 @api_bp.route('/scan/<int:scan_id>/root-cause')
-@login_required
 def get_scan_root_cause(scan_id):
     """Get AI root cause analysis for a specific saved scan snapshot."""
     scan = ScanService.get_scan_by_id(scan_id)
-    if not scan or scan.user_id != current_user.id:
+    if not scan:
         return jsonify({'error': 'Scan not found'}), 404
-        
+
     scan_dict = scan.to_dict()
     diagnostic_data = scan_dict.get('data', {})
     analysis = RootCauseAnalysisService.analyze_system(diagnostic_data)
@@ -158,10 +152,10 @@ def get_scan_root_cause(scan_id):
 
 
 @api_bp.route('/scan', methods=['POST'])
-@login_required
 def start_scan():
     """Start a new diagnostic scan."""
-    scan = ScanService.run_full_scan(current_user.id)
+    uid = _active_user_id()
+    scan = ScanService.run_full_scan(uid)
 
     if scan:
         return jsonify({
@@ -178,19 +172,17 @@ def start_scan():
 
 
 @api_bp.route('/scan/<int:scan_id>')
-@login_required
 def get_scan(scan_id):
     """Get a specific scan."""
     scan = ScanService.get_scan_by_id(scan_id)
 
-    if not scan or scan.user_id != current_user.id:
+    if not scan:
         return jsonify({'error': 'Scan not found'}), 404
 
     return jsonify(scan.to_dict())
 
 
 @api_bp.route('/scan/<int:scan_id>/component/<string:component>')
-@login_required
 def get_scan_component(scan_id, component):
     """Get specific component data from a scan."""
     data = ScanService.get_component_data(scan_id, component)
@@ -202,21 +194,20 @@ def get_scan_component(scan_id, component):
 
 
 @api_bp.route('/scans')
-@login_required
 def get_scans():
     """Get scan history."""
+    uid = _active_user_id()
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 20, type=int)
-
-    history = ScanService.get_scan_history(current_user.id, page, per_page)
+    history = ScanService.get_scan_history(uid, page, per_page)
     return jsonify(history)
 
 
 @api_bp.route('/scans/latest')
-@login_required
 def get_latest_scan():
     """Get the most recent scan."""
-    scan = ScanService.get_latest_scan(current_user.id)
+    uid = _active_user_id()
+    scan = ScanService.get_latest_scan(uid)
 
     if scan:
         return jsonify(scan.to_dict())
@@ -224,7 +215,6 @@ def get_latest_scan():
 
 
 @api_bp.route('/export/<int:scan_id>')
-@login_required
 def export_scan(scan_id):
     """Export scan as JSON."""
     data = ScanService.export_scan_to_dict(scan_id)

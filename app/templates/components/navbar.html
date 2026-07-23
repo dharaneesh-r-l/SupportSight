@@ -22,6 +22,7 @@
             </a>
         </div>
         
+        {% if current_user.is_authenticated %}
         <div class="navbar-user dropdown">
             <button class="user-toggle dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                 <div class="user-avatar">
@@ -65,5 +66,11 @@
                 </li>
             </ul>
         </div>
+        {% else %}
+        <a href="{{ url_for('auth.login') }}" class="btn btn-sm btn-outline-primary ms-2">
+            <i class='bx bx-log-in me-1'></i> Login
+        </a>
+        {% endif %}
+
     </div>
 </nav>
