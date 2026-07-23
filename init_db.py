@@ -39,14 +39,19 @@ def init_database():
                 last_name='User',
                 role='admin'
             )
-            admin.set_password('Admin@123')
+            admin.set_password('password123')
             db.session.add(admin)
             db.session.commit()
             print("[OK] Admin user created")
             print("  Username: admin")
-            print("  Password: Admin@123")
+            print("  Password: password123")
         else:
-            print("[OK] Admin user already exists")
+            if not admin.check_password('password123') and not admin.check_password('Admin@123'):
+                admin.set_password('password123')
+                db.session.commit()
+                print("[OK] Admin user password reset to: password123")
+            else:
+                print("[OK] Admin user already exists")
 
         # Create logs directory
         logs_dir = Path(__file__).parent / 'logs'

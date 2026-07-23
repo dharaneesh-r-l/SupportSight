@@ -35,77 +35,127 @@ class SystemInfoService:
         return os.environ.get('USERNAME', os.environ.get('USER', 'Unknown'))
 
     @classmethod
+    def get_processor_name(cls) -> str:
+        """
+        Get accurate human-readable processor model name.
+
+        Returns:
+            Processor brand string (e.g., 'AMD Ryzen 5 5600H with Radeon Graphics')
+        """
+        if platform.system() == 'Windows':
+            try:
+                import winreg
+                reg = winreg.ConnectRegistry(None, winreg.HKEY_LOCAL_MACHINE)
+                key = winreg.OpenKey(reg, r'HARDWARE\DESCRIPTION\System\CentralProcessor\0')
+                proc_name = winreg.QueryValueEx(key, 'ProcessorNameString')[0].strip()
+                winreg.CloseKey(key)
+                winreg.CloseKey(reg)
+                if proc_name:
+                    return proc_name
+            except Exception:
+                pass
+
+        raw_proc = platform.processor()
+        if raw_proc and not raw_proc.startswith('Intel64 Family') and not raw_proc.startswith('AMD64 Family'):
+            return raw_proc
+        return raw_proc or 'Generic x86_64 Processor'
+
+    @classmethod
     def get_platform_info(cls) -> Dict[str, str]:
         """
-        Get platform information.
+        Get platform information with accurate OS and Processor names.
 
         Returns:
             Dictionary with platform details
         """
+        win_ver = cls.get_windows_version()
+        sys_name = win_ver.get('name', platform.system())
+
         return {
-            'system': platform.system(),
-            'release': platform.release(),
-            'version': platform.version(),
+            'system': sys_name,
+            'release': win_ver.get('display_version') or platform.release(),
+            'version': win_ver.get('build') or platform.version(),
             'architecture': platform.machine(),
-            'processor': platform.processor(),
+            'processor': cls.get_processor_name(),
             'node': platform.node()
         }
 
     @classmethod
     def get_windows_version(cls) -> Dict[str, str]:
         """
-        Get Windows version information.
+        Get accurate Windows version information including Windows 11 detection.
 
         Returns:
             Dictionary with Windows version details
         """
         if platform.system() != 'Windows':
             return {
-                'name': 'Non-Windows System',
+                'name': platform.system(),
                 'version': platform.version(),
-                'build': ''
+                'build': '',
+                'display_version': '',
+                'edition': ''
             }
 
         try:
             import winreg
             registry = winreg.ConnectRegistry(None, winreg.HKEY_LOCAL_MACHINE)
             key = winreg.OpenKey(registry, r'SOFTWARE\Microsoft\Windows NT\CurrentVersion')
-            
-            version_info = {}
-            try:
-                version_info['name'] = winreg.QueryValueEx(key, 'ProductName')[0]
-            except FileNotFoundError:
-                version_info['name'] = 'Windows'
 
             try:
-                version_info['version'] = winreg.QueryValueEx(key, 'CurrentVersion')[0]
-            except FileNotFoundError:
-                version_info['version'] = ''
+                product_name = winreg.QueryValueEx(key, 'ProductName')[0]
+            except Exception:
+                product_name = 'Windows'
 
             try:
-                version_info['build'] = winreg.QueryValueEx(key, 'CurrentBuild')[0]
-            except FileNotFoundError:
-                version_info['build'] = ''
+                build_str = winreg.QueryValueEx(key, 'CurrentBuild')[0]
+            except Exception:
+                build_str = platform.version()
 
+            display_version = ''
             try:
-                version_info['display_version'] = winreg.QueryValueEx(key, 'DisplayVersion')[0]
-            except FileNotFoundError:
-                version_info['display_version'] = ''
+                display_version = winreg.QueryValueEx(key, 'DisplayVersion')[0]
+            except Exception:
+                pass
 
+            ubr = ''
             try:
-                version_info['edition'] = winreg.QueryValueEx(key, 'EditionID')[0]
-            except FileNotFoundError:
-                version_info['edition'] = ''
+                ubr = winreg.QueryValueEx(key, 'UBR')[0]
+            except Exception:
+                pass
+
+            edition = ''
+            try:
+                edition = winreg.QueryValueEx(key, 'EditionID')[0]
+            except Exception:
+                pass
 
             winreg.CloseKey(key)
             winreg.CloseKey(registry)
 
-            return version_info
+            # Windows 11 Check: Build >= 22000 is Windows 11
+            build_num = int(build_str) if build_str.isdigit() else 0
+            if build_num >= 22000:
+                os_name = product_name.replace('Windows 10', 'Windows 11')
+            else:
+                os_name = product_name
+
+            full_build = f"{build_str}.{ubr}" if ubr else build_str
+
+            return {
+                'name': os_name,
+                'version': f"Build {full_build}",
+                'build': full_build,
+                'display_version': display_version,
+                'edition': edition
+            }
         except Exception:
             return {
                 'name': 'Windows',
                 'version': platform.release(),
-                'build': ''
+                'build': platform.version(),
+                'display_version': '',
+                'edition': ''
             }
 
     @classmethod

@@ -21,6 +21,7 @@ from app.services.network_service import NetworkService
 from app.services.process_service import ProcessService
 from app.services.health_score_service import HealthScoreService
 from app.services.recommendation_service import RecommendationService
+from app.services.root_cause_service import RootCauseAnalysisService
 
 logger = logging.getLogger(__name__)
 
@@ -68,6 +69,10 @@ class ScanService:
             # Generate recommendations
             recommendations = RecommendationService.generate_recommendations(diagnostic_data)
             scan.set_data('recommendations', recommendations)
+
+            # Generate AI Root Cause Analysis
+            root_cause = RootCauseAnalysisService.analyze_system(diagnostic_data)
+            scan.set_data('root_cause_analysis', root_cause)
 
             # Mark scan as completed
             scan.mark_completed(health_score)
@@ -154,7 +159,7 @@ class ScanService:
         Returns:
             Scan object or None
         """
-        return Scan.query.get(scan_id)
+        return db.session.get(Scan, scan_id)
 
     @classmethod
     def get_user_scans(cls, user_id: int, limit: int = 20) -> List[Scan]:
@@ -200,7 +205,7 @@ class ScanService:
         Returns:
             True if deleted, False otherwise
         """
-        scan = Scan.query.get(scan_id)
+        scan = db.session.get(Scan, scan_id)
         if scan:
             db.session.delete(scan)
             db.session.commit()
@@ -271,7 +276,7 @@ class ScanService:
         Returns:
             Dictionary representation of scan or None
         """
-        scan = Scan.query.get(scan_id)
+        scan = db.session.get(Scan, scan_id)
         if scan:
             return scan.to_dict()
         return None
@@ -288,7 +293,7 @@ class ScanService:
         Returns:
             Component data dictionary or None
         """
-        scan = Scan.query.get(scan_id)
+        scan = db.session.get(Scan, scan_id)
         if not scan:
             return None
 

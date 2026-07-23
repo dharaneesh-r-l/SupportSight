@@ -23,34 +23,44 @@
         </div>
         
         <div class="navbar-user dropdown">
-            <button class="user-toggle dropdown-toggle" data-bs-toggle="dropdown">
+            <button class="user-toggle dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                 <div class="user-avatar">
                     {{ current_user.initials }}
                 </div>
                 <div class="user-info">
                     <span class="user-name">{{ current_user.full_name }}</span>
-                    <span class="user-role">{{ current_user.role }}</span>
+                    <span class="user-role">{{ current_user.role|title }}</span>
                 </div>
-                <i class='bx bx-chevron-down'></i>
+                <i class='bx bx-chevron-down ms-1'></i>
             </button>
-            <ul class="dropdown-menu dropdown-menu-end">
+            <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-3 p-2">
+                <li class="px-3 py-2 border-bottom mb-1">
+                    <div class="fw-bold text-dark fs-7">{{ current_user.full_name }}</div>
+                    <div class="small text-muted font-monospace">{{ current_user.email }}</div>
+                </li>
                 <li>
-                    <a class="dropdown-item" href="{{ url_for('auth.profile') }}">
-                        <i class='bx bx-user'></i>
-                        <span>Profile</span>
+                    <a class="dropdown-item py-2 rounded-2" href="{{ url_for('auth.profile') }}">
+                        <i class='bx bx-user me-2 text-primary'></i>
+                        <span>User Profile & Settings</span>
                     </a>
                 </li>
                 <li>
-                    <a class="dropdown-item" href="{{ url_for('dashboard.scan_history') }}">
-                        <i class='bx bx-history'></i>
-                        <span>Scan History</span>
+                    <a class="dropdown-item py-2 rounded-2" href="{{ url_for('dashboard.scan_history') }}">
+                        <i class='bx bx-history me-2 text-primary'></i>
+                        <span>Scan Audit History</span>
                     </a>
                 </li>
-                <li><hr class="dropdown-divider"></li>
                 <li>
-                    <a class="dropdown-item" href="{{ url_for('auth.logout') }}">
-                        <i class='bx bx-log-out'></i>
-                        <span>Logout</span>
+                    <a class="dropdown-item py-2 rounded-2" href="{{ url_for('auth.change_password') }}">
+                        <i class='bx bx-key me-2 text-primary'></i>
+                        <span>Change Password</span>
+                    </a>
+                </li>
+                <li><hr class="dropdown-divider my-1"></li>
+                <li>
+                    <a class="dropdown-item py-2 rounded-2 text-danger" href="{{ url_for('auth.logout') }}">
+                        <i class='bx bx-log-out me-2'></i>
+                        <span>Sign Out</span>
                     </a>
                 </li>
             </ul>

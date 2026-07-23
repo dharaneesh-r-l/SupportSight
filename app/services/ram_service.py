@@ -240,7 +240,7 @@ class RAMService:
                 continue
 
         # Sort by memory usage and return top processes
-        processes.sort(key=lambda x: x['memory_percent'], reverse=True)
+        processes.sort(key=lambda x: x.get('memory_percent') or 0, reverse=True)
         return processes[:limit]
 
     @classmethod

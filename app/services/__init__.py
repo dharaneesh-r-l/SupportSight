@@ -14,6 +14,7 @@ from app.services.process_service import ProcessService
 from app.services.health_score_service import HealthScoreService
 from app.services.recommendation_service import RecommendationService
 from app.services.scan_service import ScanService
+from app.services.root_cause_service import RootCauseAnalysisService
 
 __all__ = [
     'SystemInfoService',
@@ -25,5 +26,6 @@ __all__ = [
     'ProcessService',
     'HealthScoreService',
     'RecommendationService',
-    'ScanService'
+    'ScanService',
+    'RootCauseAnalysisService'
 ]

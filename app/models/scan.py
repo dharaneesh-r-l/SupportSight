@@ -6,6 +6,7 @@ Stores system scan history and results.
 
 import json
 from datetime import datetime
+from typing import Dict, Any
 from app import db
 
 
@@ -60,6 +61,7 @@ class Scan(db.Model):
     battery_data = db.Column(db.Text)
     process_data = db.Column(db.Text)
     recommendations = db.Column(db.Text)
+    root_cause_analysis = db.Column(db.Text)
 
     # Error handling
     error_message = db.Column(db.Text)
@@ -149,8 +151,8 @@ class Scan(db.Model):
             return len(recommendations)
         return 0
 
-    def to_dict(self) -> dict:
-        """Convert scan to dictionary."""
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert scan to dictionary representation."""
         return {
             'id': self.id,
             'user_id': self.user_id,
@@ -166,6 +168,7 @@ class Scan(db.Model):
             'battery_data': self.get_data('battery_data'),
             'process_data': self.get_data('process_data'),
             'recommendations': self.get_data('recommendations'),
+            'root_cause_analysis': self.get_data('root_cause_analysis'),
             'error_message': self.error_message,
             'started_at': self.started_at.isoformat() if self.started_at else None,
             'completed_at': self.completed_at.isoformat() if self.completed_at else None,

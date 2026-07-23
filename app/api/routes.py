@@ -16,6 +16,7 @@ from app.services.battery_service import BatteryService
 from app.services.process_service import ProcessService
 from app.services.health_score_service import HealthScoreService
 from app.services.scan_service import ScanService
+from app.services.root_cause_service import RootCauseAnalysisService
 from app.models.scan import Scan
 
 
@@ -129,6 +130,31 @@ def get_quick_status():
     """Get quick system status."""
     data = ScanService.get_quick_status()
     return jsonify(data)
+
+
+@api_bp.route('/root-cause')
+@login_required
+def get_root_cause_analysis():
+    """Get AI root cause analysis for current live system diagnostics."""
+    status_data = ScanService.get_quick_status()
+    # Add top processes to snapshot
+    status_data['processes'] = ProcessService.get_top_cpu_processes(10)
+    analysis = RootCauseAnalysisService.analyze_system(status_data)
+    return jsonify(analysis)
+
+
+@api_bp.route('/scan/<int:scan_id>/root-cause')
+@login_required
+def get_scan_root_cause(scan_id):
+    """Get AI root cause analysis for a specific saved scan snapshot."""
+    scan = ScanService.get_scan_by_id(scan_id)
+    if not scan or scan.user_id != current_user.id:
+        return jsonify({'error': 'Scan not found'}), 404
+        
+    scan_dict = scan.to_dict()
+    diagnostic_data = scan_dict.get('data', {})
+    analysis = RootCauseAnalysisService.analyze_system(diagnostic_data)
+    return jsonify(analysis)
 
 
 @api_bp.route('/scan', methods=['POST'])

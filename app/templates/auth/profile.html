@@ -1,82 +1,215 @@
 {% extends 'base.html' %}
 
-{% block title %}Profile - SupportSight{% endblock %}
-{% block page_title %}Profile{% endblock %}
+{% block title %}User Profile - SupportSight{% endblock %}
+{% block page_title %}User Account & Settings{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-lg-4">
-        <div class="card profile-card" data-aos="fade-up">
-            <div class="card-body text-center">
-                <div class="profile-avatar">
-                    {{ user.initials }}
-                </div>
-                <h3 class="profile-name">{{ user.full_name }}</h3>
-                <p class="profile-role">{{ user.role|title }}</p>
-                
-                <div class="profile-stats">
-                    <div class="stat-item">
-                        <span class="stat-value">{{ user.scan_history.count() }}</span>
-                        <span class="stat-label">Scans</span>
+<!-- User Profile Hero Card (Windows 11 Fluent Design) -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card profile-hero-card defender-card" data-aos="fade-up">
+            <div class="card-body p-4">
+                <div class="d-flex flex-column flex-md-row align-items-center gap-4">
+                    <!-- User Avatar Ring -->
+                    <div class="profile-avatar-container position-relative">
+                        <div class="profile-avatar-ring">
+                            <div class="profile-avatar-inner">
+                                {{ user.initials }}
+                            </div>
+                        </div>
+                        <span class="status-indicator-badge bg-success" title="Account Active"></span>
                     </div>
-                    <div class="stat-item">
-                        <span class="stat-value">{{ user.created_at.strftime('%b %d') if user.created_at else 'N/A' }}</span>
-                        <span class="stat-label">Joined</span>
+
+                    <!-- User Information Overview -->
+                    <div class="profile-hero-details flex-grow-1 text-center text-md-start">
+                        <div class="d-flex align-items-center justify-content-center justify-content-md-start gap-2 mb-1">
+                            <h2 class="profile-hero-name mb-0">{{ user.full_name }}</h2>
+                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1 fs-7">
+                                <i class='bx bxs-shield me-1'></i> {{ user.role|title }}
+                            </span>
+                        </div>
+                        <p class="profile-hero-email text-muted mb-3">
+                            <i class='bx bx-envelope me-1'></i> {{ user.email }} &nbsp;|&nbsp; 
+                            <i class='bx bx-user-check me-1'></i> @{{ user.username }}
+                        </p>
+
+                        <!-- Quick User Action Pills -->
+                        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-start gap-2">
+                            <a href="{{ url_for('auth.change_password') }}" class="btn btn-sm btn-primary">
+                                <i class='bx bx-key me-1'></i> Change Password
+                            </a>
+                            <a href="{{ url_for('dashboard.scan_history') }}" class="btn btn-sm btn-outline-secondary">
+                                <i class='bx bx-history me-1'></i> Scan History ({{ user.scan_history.count() }})
+                            </a>
+                        </div>
                     </div>
-                </div>
-                
-                <a href="{{ url_for('auth.change_password') }}" class="btn btn-outline-primary btn-sm">
-                    <i class='bx bx-key'></i>
-                    Change Password
-                </a>
-            </div>
-        </div>
-    </div>
-    
-    <div class="col-lg-8">
-        <div class="card" data-aos="fade-up" data-aos-delay="100">
-            <div class="card-header">
-                <h5><i class='bx bx-user'></i> Account Information</h5>
-            </div>
-            <div class="card-body">
-                <div class="info-row">
-                    <div class="info-label">Username</div>
-                    <div class="info-value">{{ user.username }}</div>
-                </div>
-                <div class="info-row">
-                    <div class="info-label">Email</div>
-                    <div class="info-value">{{ user.email }}</div>
-                </div>
-                <div class="info-row">
-                    <div class="info-label">First Name</div>
-                    <div class="info-value">{{ user.first_name or 'Not set' }}</div>
-                </div>
-                <div class="info-row">
-                    <div class="info-label">Last Name</div>
-                    <div class="info-value">{{ user.last_name or 'Not set' }}</div>
-                </div>
-                <div class="info-row">
-                    <div class="info-label">Role</div>
-                    <div class="info-value">{{ user.role|title }}</div>
-                </div>
-                <div class="info-row">
-                    <div class="info-label">Account Status</div>
-                    <div class="info-value">
-                        <span class="badge bg-{{ 'success' if user.is_active else 'danger' }}">
-                            {{ 'Active' if user.is_active else 'Inactive' }}
-                        </span>
+
+                    <!-- Quick Telemetry Context Badge -->
+                    <div class="profile-stats-card p-3 rounded-3 border bg-light text-center">
+                        <div class="stat-value font-monospace fw-bold fs-4 text-primary">{{ user.scan_history.count() }}</div>
+                        <div class="stat-label small text-muted">Total Diagnostics</div>
+                        <hr class="my-2">
+                        <div class="small text-secondary">
+                            <i class='bx bx-calendar me-1'></i> Member Since {{ user.created_at.strftime('%b %Y') if user.created_at else 'N/A' }}
+                        </div>
                     </div>
-                </div>
-                <div class="info-row">
-                    <div class="info-label">Member Since</div>
-                    <div class="info-value">{{ user.created_at.strftime('%B %d, %Y') if user.created_at else 'N/A' }}</div>
-                </div>
-                <div class="info-row">
-                    <div class="info-label">Last Login</div>
-                    <div class="info-value">{{ user.last_login.strftime('%B %d, %Y %H:%M') if user.last_login else 'Never' }}</div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Detailed Account & System Details -->
+<div class="row">
+    <!-- Account Information Grid -->
+    <div class="col-lg-7 mb-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="card h-100 defender-card">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="mb-0"><i class='bx bx-id-card text-primary me-2'></i> Account Specifications</h5>
+                <span class="badge bg-success-subtle text-success border border-success-subtle">
+                    <i class='bx bx-check-circle me-1'></i> Active Account
+                </span>
+            </div>
+            <div class="card-body">
+                <div class="profile-info-grid">
+                    <div class="info-row-item">
+                        <span class="info-label"><i class='bx bx-user me-2 text-muted'></i> Username</span>
+                        <span class="info-value font-monospace">{{ user.username }}</span>
+                    </div>
+                    <div class="info-row-item">
+                        <span class="info-label"><i class='bx bx-envelope me-2 text-muted'></i> Email Address</span>
+                        <span class="info-value">{{ user.email }}</span>
+                    </div>
+                    <div class="info-row-item">
+                        <span class="info-label"><i class='bx bx-badge me-2 text-muted'></i> First Name</span>
+                        <span class="info-value">{{ user.first_name or 'Not set' }}</span>
+                    </div>
+                    <div class="info-row-item">
+                        <span class="info-label"><i class='bx bx-badge me-2 text-muted'></i> Last Name</span>
+                        <span class="info-value">{{ user.last_name or 'Not set' }}</span>
+                    </div>
+                    <div class="info-row-item">
+                        <span class="info-label"><i class='bx bx-shield-alt-2 me-2 text-muted'></i> Privilege Level</span>
+                        <span class="info-value fw-bold text-primary">{{ user.role|title }} Access</span>
+                    </div>
+                    <div class="info-row-item">
+                        <span class="info-label"><i class='bx bx-time me-2 text-muted'></i> Last Login Session</span>
+                        <span class="info-value">{{ user.last_login.strftime('%B %d, %Y at %H:%M') if user.last_login else 'Current Session' }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Active Hardware & System Recognition Card -->
+    <div class="col-lg-5 mb-4" data-aos="fade-up" data-aos-delay="150">
+        <div class="card h-100 defender-card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class='bx bx-desktop text-primary me-2'></i> System Recognition</h5>
+            </div>
+            <div class="card-body">
+                <div class="system-context-box">
+                    <div class="context-item mb-3">
+                        <div class="context-label text-muted small"><i class='bx bxl-windows me-1 text-primary'></i> Operating System</div>
+                        <div class="context-value fw-semibold fs-6" id="profileOsName">Detecting...</div>
+                    </div>
+                    <div class="context-item mb-3">
+                        <div class="context-label text-muted small"><i class='bx bx-microchip me-1 text-primary'></i> Processor Model</div>
+                        <div class="context-value fw-semibold fs-6" id="profileCpuName">Detecting...</div>
+                    </div>
+                    <div class="context-item mb-3">
+                        <div class="context-label text-muted small"><i class='bx bx-devices me-1 text-primary'></i> Computer Hostname</div>
+                        <div class="context-value font-monospace small" id="profileHostName">Detecting...</div>
+                    </div>
+                </div>
+
+                <div class="mt-4 pt-3 border-top">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <span class="small text-muted">Telemetry Status</span>
+                        <span class="badge bg-success"><i class='bx bx-wifi me-1'></i> Realtime Connected</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.profile-avatar-container {
+    width: 84px;
+    height: 84px;
+}
+.profile-avatar-ring {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0078D4 0%, #00BCF2 100%);
+    padding: 3px;
+    box-shadow: 0 4px 12px rgba(0, 120, 212, 0.25);
+}
+.profile-avatar-inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: #0F172A;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    font-weight: 700;
+}
+.status-indicator-badge {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 3px solid var(--white, #fff);
+}
+.profile-info-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+.info-row-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.65rem 0.85rem;
+    background: var(--gray-50, #F8FAFC);
+    border-radius: var(--radius-md, 8px);
+    border: 1px solid var(--gray-200, #E2E8F0);
+}
+.info-label {
+    font-size: 0.875rem;
+    color: var(--gray-600, #64748B);
+    font-weight: 500;
+}
+.info-value {
+    font-size: 0.875rem;
+    color: var(--gray-900, #0F172A);
+    font-weight: 600;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('/api/system')
+        .then(response => response.json())
+        .then(data => {
+            if (data.platform) {
+                document.getElementById('profileOsName').innerText = data.platform.system || 'Windows 11';
+                document.getElementById('profileCpuName').innerText = data.platform.processor || 'Processor';
+                document.getElementById('profileHostName').innerText = data.computer_name || 'Host';
+            }
+        })
+        .catch(err => console.error('Failed to load profile system telemetry:', err));
+});
+</script>
 {% endblock %}

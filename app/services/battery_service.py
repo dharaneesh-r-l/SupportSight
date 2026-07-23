@@ -199,13 +199,13 @@ class BatteryService:
         """
         seconds = cls.get_time_remaining()
 
-        if seconds == -1:
+        if not PSUTIL_AVAILABLE or seconds is None or seconds == -1:
             return 'Calculating...'
 
-        if seconds == psutil.POWER_TIME_UNLIMITED:
+        if hasattr(psutil, 'POWER_TIME_UNLIMITED') and seconds == psutil.POWER_TIME_UNLIMITED:
             return 'Unlimited'
 
-        if seconds == psutil.POWER_TIME_UNKNOWN:
+        if hasattr(psutil, 'POWER_TIME_UNKNOWN') and seconds == psutil.POWER_TIME_UNKNOWN:
             return 'Unknown'
 
         hours = seconds // 3600

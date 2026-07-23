@@ -255,7 +255,7 @@ class CPUService:
                 continue
 
         # Sort by CPU usage and return top processes
-        processes.sort(key=lambda x: x['cpu_percent'], reverse=True)
+        processes.sort(key=lambda x: x.get('cpu_percent') or 0, reverse=True)
         return processes[:limit]
 
     @classmethod

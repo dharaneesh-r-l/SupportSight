@@ -1,6 +1,14 @@
-/**
- * SupportSight - Chart Configurations
- */
+// Helper function for Windows 11 & Defender Chart Colors
+function getChartColors() {
+    return {
+        primary: '#0078D4',    // Windows Segoe Blue
+        success: '#107C41',    // Defender Green
+        warning: '#D97706',    // Defender Amber
+        danger: '#D13438',     // Defender Critical Red
+        purple: '#0284C7',     // Windows Info Blue
+        info: '#0284C7'
+    };
+}
 
 // Default chart options
 const defaultChartOptions = {
@@ -12,24 +20,25 @@ const defaultChartOptions = {
             position: 'top',
             labels: {
                 usePointStyle: true,
-                padding: 20,
+                padding: 16,
                 font: {
-                    family: "'Inter', sans-serif",
+                    family: "'Segoe UI Variable Text', 'Segoe UI', 'Inter', sans-serif",
                     size: 12
                 }
             }
         },
         tooltip: {
-            backgroundColor: 'rgba(15, 23, 42, 0.9)',
+            backgroundColor: 'rgba(30, 41, 59, 0.95)',
             titleFont: {
-                family: "'Inter', sans-serif",
-                size: 13
+                family: "'Segoe UI Variable Text', 'Segoe UI', 'Inter', sans-serif",
+                size: 13,
+                weight: '600'
             },
             bodyFont: {
-                family: "'Inter', sans-serif",
+                family: "'Segoe UI Variable Text', 'Segoe UI', 'Inter', sans-serif",
                 size: 12
             },
-            padding: 12,
+            padding: 10,
             cornerRadius: 8,
             displayColors: true,
             boxPadding: 4
@@ -42,27 +51,27 @@ const defaultChartOptions = {
             },
             ticks: {
                 font: {
-                    family: "'Inter', sans-serif",
+                    family: "'Segoe UI Variable Text', 'Segoe UI', sans-serif",
                     size: 11
                 },
-                color: '#6c757d'
+                color: '#64748b'
             }
         },
         y: {
             grid: {
-                color: 'rgba(0, 0, 0, 0.05)'
+                color: 'rgba(0, 0, 0, 0.04)'
             },
             ticks: {
                 font: {
-                    family: "'Inter', sans-serif",
+                    family: "'Segoe UI Variable Text', 'Segoe UI', sans-serif",
                     size: 11
                 },
-                color: '#6c757d'
+                color: '#64748b'
             }
         }
     },
     animation: {
-        duration: 500,
+        duration: 400,
         easing: 'easeOutQuart'
     }
 };

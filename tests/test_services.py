@@ -11,6 +11,7 @@ from app.services.health_score_service import HealthScoreService
 from app.services.recommendation_service import RecommendationService
 from app.services.scan_service import ScanService
 from app.services.reports_service import ReportsService
+from app.services.root_cause_service import RootCauseAnalysisService
 from app.models.scan import Scan
 from app import db
 
@@ -143,3 +144,40 @@ def test_scan_and_recommendation_and_report_services(app, test_user):
         # Cleanup created pdf file
         if os.path.exists(pdf_path):
             os.remove(pdf_path)
+
+
+def test_root_cause_service():
+    # Test with critical high usage metrics
+    mock_data = {
+        'cpu': {'usage': 94.5, 'count': 8, 'top_processes': [{'name': 'chrome.exe', 'cpu_percent': 45.2}]},
+        'ram': {'memory': {'percent': 88.0, 'available_mb': 1024, 'total_gb': 16.0}},
+        'disk': {'overall_percent': 92.0, 'partitions': [{'device': 'C:', 'percent': 95.0}]},
+        'network': {'connected': False, 'latency': 0},
+        'battery': {'has_battery': True, 'percent': 15, 'is_charging': False}
+    }
+
+    result = RootCauseAnalysisService.analyze_system(mock_data)
+    assert isinstance(result, dict)
+    assert 'summary' in result
+    assert 'findings' in result
+    assert result['overall_confidence'] >= 75
+    assert len(result['findings']) == 5
+
+    first_finding = result['findings'][0]
+    assert 'possible_causes' in first_finding
+    assert 'severity' in first_finding
+    assert 'confidence_score' in first_finding
+    assert 'step_by_step_recommendations' in first_finding
+    assert len(first_finding['step_by_step_recommendations']) > 0
+
+    # Test with healthy metrics
+    healthy_data = {
+        'cpu': {'usage': 25.0},
+        'ram': {'memory': {'percent': 40.0}},
+        'disk': {'overall_percent': 50.0},
+        'network': {'connected': True, 'latency': 25.0}
+    }
+    healthy_result = RootCauseAnalysisService.analyze_system(healthy_data)
+    assert healthy_result['overall_confidence'] == 99
+    assert len(healthy_result['findings']) == 1
+    assert healthy_result['findings'][0]['severity'] == 'Low'

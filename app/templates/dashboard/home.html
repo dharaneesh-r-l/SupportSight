@@ -4,13 +4,42 @@
 {% block page_title %}Dashboard{% endblock %}
 
 {% block content %}
-<!-- Health Score Section -->
+<!-- Microsoft Defender Health Hero Banner -->
 <div class="row mb-4">
     <div class="col-12">
-        <div class="card health-score-card" data-aos="fade-up">
-            <div class="card-body">
-                <div class="health-score-container">
-                    <div class="health-score-visual">
+        <div class="card defender-hero-card" data-aos="fade-up">
+            <div class="card-body p-4">
+                <div class="defender-hero-container">
+                    <div class="defender-status-badge">
+                        <div class="defender-shield-icon" id="defenderShieldIcon">
+                            <i class='bx bxs-shield-check'></i>
+                        </div>
+                    </div>
+                    <div class="defender-hero-info">
+                        <div class="defender-status-pill mb-2">
+                            <span class="status-dot"></span>
+                            <span id="healthCategory">Checking health status...</span>
+                        </div>
+                        <h2 class="defender-hero-title">Device Health & Diagnostic Overview</h2>
+                        <p class="defender-hero-desc">
+                            {% if latest_scan %}
+                            <i class='bx bx-time-five me-1'></i> Last scan completed: {{ latest_scan.started_at|format_datetime('%Y-%m-%d %H:%M') if latest_scan.started_at else 'N/A' }}
+                            {% else %}
+                            <i class='bx bx-info-circle me-1'></i> No diagnostic scans recorded. Run your first system scan.
+                            {% endif %}
+                        </p>
+                        <div class="defender-hero-actions mt-3">
+                            <a href="{{ url_for('dashboard.quick_scan') }}" class="btn btn-primary">
+                                <i class='bx bx-scan'></i>
+                                <span>Run Full Scan</span>
+                            </a>
+                            <a href="{{ url_for('dashboard.scan_history') }}" class="btn btn-outline-secondary ms-2">
+                                <i class='bx bx-history'></i>
+                                <span>Scan History</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="defender-hero-score">
                         <div class="health-score-circle" id="healthScoreCircle">
                             <svg viewBox="0 0 100 100">
                                 <circle class="health-bg" cx="50" cy="50" r="45"/>
@@ -22,21 +51,7 @@
                                 <span class="max">/100</span>
                             </div>
                         </div>
-                    </div>
-                    <div class="health-score-info">
-                        <h2 class="health-title">System Health</h2>
-                        <p class="health-category" id="healthCategory">Loading...</p>
-                        <p class="health-description">
-                            {% if latest_scan %}
-                            Last scan: {{ latest_scan.started_at|format_datetime('%Y-%m-%d %H:%M') if latest_scan.started_at else 'N/A' }}
-                            {% else %}
-                            Run a scan to get your health assessment
-                            {% endif %}
-                        </p>
-                        <a href="{{ url_for('dashboard.quick_scan') }}" class="btn btn-primary mt-3">
-                            <i class='bx bx-scan'></i>
-                            Run Full Scan
-                        </a>
+                        <span class="score-caption">Health Index</span>
                     </div>
                 </div>
             </div>
@@ -44,16 +59,19 @@
     </div>
 </div>
 
-<!-- Quick Stats Cards -->
+<!-- Windows 11 Metric Cards -->
 <div class="row mb-4">
     <!-- CPU Card -->
     <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="100">
-        <div class="stat-card cpu-card">
-            <div class="stat-icon">
-                <i class='bx bx-microchip'></i>
+        <div class="stat-card defender-tile cpu-tile">
+            <div class="tile-header">
+                <div class="stat-icon cpu-icon">
+                    <i class='bx bx-microchip'></i>
+                </div>
+                <span class="tile-badge">CPU</span>
             </div>
             <div class="stat-content">
-                <span class="stat-label">CPU Usage</span>
+                <span class="stat-label">Processor Load</span>
                 <span class="stat-value" id="cpuUsage">--</span>
                 <div class="stat-bar">
                     <div class="stat-bar-fill" id="cpuBar" style="width: 0%"></div>
@@ -64,12 +82,15 @@
     
     <!-- RAM Card -->
     <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="150">
-        <div class="stat-card ram-card">
-            <div class="stat-icon">
-                <i class='bx bx-memory-card'></i>
+        <div class="stat-card defender-tile ram-tile">
+            <div class="tile-header">
+                <div class="stat-icon ram-icon">
+                    <i class='bx bx-memory-card'></i>
+                </div>
+                <span class="tile-badge">RAM</span>
             </div>
             <div class="stat-content">
-                <span class="stat-label">Memory</span>
+                <span class="stat-label">Memory Usage</span>
                 <span class="stat-value" id="ramUsage">--</span>
                 <div class="stat-bar">
                     <div class="stat-bar-fill" id="ramBar" style="width: 0%"></div>
@@ -80,12 +101,15 @@
     
     <!-- Disk Card -->
     <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="200">
-        <div class="stat-card disk-card">
-            <div class="stat-icon">
-                <i class='bx bx-hdd'></i>
+        <div class="stat-card defender-tile disk-tile">
+            <div class="tile-header">
+                <div class="stat-icon disk-icon">
+                    <i class='bx bx-hdd'></i>
+                </div>
+                <span class="tile-badge">Storage</span>
             </div>
             <div class="stat-content">
-                <span class="stat-label">Disk Usage</span>
+                <span class="stat-label">Disk Capacity</span>
                 <span class="stat-value" id="diskUsage">--</span>
                 <div class="stat-bar">
                     <div class="stat-bar-fill" id="diskBar" style="width: 0%"></div>
@@ -96,12 +120,15 @@
     
     <!-- Network Card -->
     <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="250">
-        <div class="stat-card network-card">
-            <div class="stat-icon">
-                <i class='bx bx-wifi'></i>
+        <div class="stat-card defender-tile network-tile">
+            <div class="tile-header">
+                <div class="stat-icon network-icon">
+                    <i class='bx bx-wifi'></i>
+                </div>
+                <span class="tile-badge">Network</span>
             </div>
             <div class="stat-content">
-                <span class="stat-label">Network</span>
+                <span class="stat-label">Connection</span>
                 <span class="stat-value" id="networkStatus">--</span>
                 <span class="stat-secondary" id="networkLatency"></span>
             </div>
@@ -109,13 +136,36 @@
     </div>
 </div>
 
-<!-- Charts and Details Row -->
+<!-- AI Root Cause Analysis Module -->
 <div class="row mb-4">
-    <!-- Usage Chart -->
+    <div class="col-12" data-aos="fade-up" data-aos-delay="280">
+        <div class="card root-cause-card defender-card">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="mb-0">
+                    <i class='bx bx-brain text-primary me-2'></i>
+                    AI Root Cause Analysis Engine
+                </h5>
+                <span class="badge bg-primary-subtle text-primary px-3 py-1 border border-primary-subtle rounded-pill">
+                    <i class='bx bx-chip me-1'></i> Local Rule-Based AI
+                </span>
+            </div>
+            <div class="card-body" id="rootCauseContainer">
+                <div class="loading-spinner">
+                    <i class='bx bx-loader-alt bx-spin'></i>
+                    <span>Running local AI root cause inference...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts & Quick Actions -->
+<div class="row mb-4">
+    <!-- Performance Chart -->
     <div class="col-lg-8" data-aos="fade-up" data-aos-delay="300">
-        <div class="card chart-card">
+        <div class="card chart-card defender-card">
             <div class="card-header">
-                <h5><i class='bx bx-line-chart'></i> System Performance</h5>
+                <h5><i class='bx bx-line-chart text-primary'></i> System Performance Telemetry</h5>
             </div>
             <div class="card-body">
                 <canvas id="performanceChart"></canvas>
@@ -125,35 +175,35 @@
     
     <!-- Quick Actions -->
     <div class="col-lg-4" data-aos="fade-up" data-aos-delay="350">
-        <div class="card quick-actions-card">
+        <div class="card quick-actions-card defender-card">
             <div class="card-header">
-                <h5><i class='bx bx-zap'></i> Quick Actions</h5>
+                <h5><i class='bx bx-slider-alt text-primary'></i> Quick Diagnostics</h5>
             </div>
             <div class="card-body">
                 <div class="quick-actions-list">
                     <a href="{{ url_for('diagnostics.cpu') }}" class="quick-action-item">
                         <i class='bx bx-microchip'></i>
-                        <span>View CPU Details</span>
+                        <span>CPU Diagnostics</span>
                         <i class='bx bx-chevron-right'></i>
                     </a>
                     <a href="{{ url_for('diagnostics.ram') }}" class="quick-action-item">
                         <i class='bx bx-memory-card'></i>
-                        <span>View Memory Details</span>
+                        <span>Memory Diagnostics</span>
                         <i class='bx bx-chevron-right'></i>
                     </a>
                     <a href="{{ url_for('diagnostics.disk') }}" class="quick-action-item">
                         <i class='bx bx-hdd'></i>
-                        <span>View Disk Details</span>
+                        <span>Storage & Disk Details</span>
                         <i class='bx bx-chevron-right'></i>
                     </a>
                     <a href="{{ url_for('diagnostics.network') }}" class="quick-action-item">
                         <i class='bx bx-wifi'></i>
-                        <span>View Network Details</span>
+                        <span>Network & Latency</span>
                         <i class='bx bx-chevron-right'></i>
                     </a>
                     <a href="{{ url_for('diagnostics.processes') }}" class="quick-action-item">
                         <i class='bx bx-list-ul'></i>
-                        <span>View Processes</span>
+                        <span>Process Monitor</span>
                         <i class='bx bx-chevron-right'></i>
                     </a>
                 </div>
@@ -162,14 +212,14 @@
     </div>
 </div>
 
-<!-- Recent Scans & Recommendations Row -->
+<!-- Recent Scans & Recommendations -->
 <div class="row">
     <!-- Recent Scans -->
     <div class="col-lg-6" data-aos="fade-up" data-aos-delay="400">
-        <div class="card recent-scans-card">
+        <div class="card recent-scans-card defender-card">
             <div class="card-header">
-                <h5><i class='bx bx-history'></i> Recent Scans</h5>
-                <a href="{{ url_for('dashboard.scan_history') }}" class="btn btn-sm btn-link">View All</a>
+                <h5><i class='bx bx-history text-primary'></i> Diagnostic Scan Log</h5>
+                <a href="{{ url_for('dashboard.scan_history') }}" class="btn btn-sm btn-outline-secondary">View All Logged Scans</a>
             </div>
             <div class="card-body">
                 {% if recent_scans %}
@@ -190,7 +240,7 @@
                 {% else %}
                 <div class="empty-state">
                     <i class='bx bx-scan'></i>
-                    <p>No scans yet. Run your first scan!</p>
+                    <p>No scans recorded yet. Trigger a scan to build history.</p>
                 </div>
                 {% endif %}
             </div>
@@ -199,14 +249,14 @@
     
     <!-- Recommendations -->
     <div class="col-lg-6" data-aos="fade-up" data-aos-delay="450">
-        <div class="card recommendations-card">
+        <div class="card recommendations-card defender-card">
             <div class="card-header">
-                <h5><i class='bx bx-message-detail'></i> Recommendations</h5>
+                <h5><i class='bx bx-shield-quarter text-primary'></i> Security & Health Status</h5>
             </div>
             <div class="card-body" id="recommendationsContainer">
                 <div class="loading-spinner">
                     <i class='bx bx-loader-alt bx-spin'></i>
-                    <span>Loading recommendations...</span>
+                    <span>Analyzing system recommendations...</span>
                 </div>
             </div>
         </div>
@@ -217,22 +267,17 @@
 {% block extra_js %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Load health score
     loadHealthScore();
-    
-    // Load quick status
     loadQuickStatus();
-    
-    // Initialize charts
     initPerformanceChart();
-    
-    // Load recommendations
     loadRecommendations();
+    loadRootCauseAnalysis();
     
     // Auto-refresh every 30 seconds
     setInterval(() => {
         loadHealthScore();
         loadQuickStatus();
+        loadRootCauseAnalysis();
     }, 30000);
 });
 
@@ -244,23 +289,40 @@ async function loadHealthScore() {
         const score = data.overall_score || 0;
         const category = data.category || 'Unknown';
         
-        // Update score display
         animateValue('healthScoreValue', 0, score, 1500);
-        document.getElementById('healthCategory').textContent = category;
+        document.getElementById('healthCategory').textContent = category + ' Status';
         
-        // Update circle
         const circle = document.querySelector('.health-progress');
-        const circumference = 2 * Math.PI * 45;
-        const offset = circumference - (score / 100) * circumference;
-        circle.style.strokeDashoffset = offset;
-        
-        // Set color based on score
-        let color = '#dc3545';
-        if (score >= 80) color = '#28a745';
-        else if (score >= 60) color = '#ffc107';
-        else if (score >= 40) color = '#fd7e14';
-        
-        circle.style.stroke = color;
+        if (circle) {
+            const circumference = 2 * Math.PI * 45;
+            const offset = circumference - (score / 100) * circumference;
+            circle.style.strokeDashoffset = offset;
+            
+            let color = '#d13438'; // Microsoft Defender Critical Red
+            if (score >= 80) color = '#107c41'; // Microsoft Defender Green
+            else if (score >= 60) color = '#d97706'; // Defender Amber
+            else if (score >= 40) color = '#ea580c'; // Defender Orange
+            
+            circle.style.stroke = color;
+        }
+
+        // Update Defender Shield Icon
+        const shieldIcon = document.getElementById('defenderShieldIcon');
+        if (shieldIcon) {
+            if (score >= 80) {
+                shieldIcon.className = 'defender-shield-icon status-excellent';
+                shieldIcon.innerHTML = "<i class='bx bxs-shield-check'></i>";
+            } else if (score >= 60) {
+                shieldIcon.className = 'defender-shield-icon status-good';
+                shieldIcon.innerHTML = "<i class='bx bxs-shield'></i>";
+            } else if (score >= 40) {
+                shieldIcon.className = 'defender-shield-icon status-warning';
+                shieldIcon.innerHTML = "<i class='bx bxs-shield-x'></i>";
+            } else {
+                shieldIcon.className = 'defender-shield-icon status-critical';
+                shieldIcon.innerHTML = "<i class='bx bxs-error-shield'></i>";
+            }
+        }
     } catch (error) {
         console.error('Error loading health score:', error);
     }
@@ -271,7 +333,6 @@ async function loadQuickStatus() {
         const response = await fetch('/api/status');
         const data = await response.json();
         
-        // Update CPU
         if (data.cpu) {
             const cpuUsage = data.cpu.usage || 0;
             document.getElementById('cpuUsage').textContent = cpuUsage.toFixed(1) + '%';
@@ -279,7 +340,6 @@ async function loadQuickStatus() {
             updateBarColor('cpuBar', cpuUsage);
         }
         
-        // Update RAM
         if (data.ram) {
             const ramUsage = data.ram.percent || 0;
             document.getElementById('ramUsage').textContent = ramUsage.toFixed(1) + '%';
@@ -287,7 +347,6 @@ async function loadQuickStatus() {
             updateBarColor('ramBar', ramUsage);
         }
         
-        // Update Disk
         if (data.disk && data.disk.overall_percent !== undefined) {
             const diskUsage = data.disk.overall_percent || 0;
             document.getElementById('diskUsage').textContent = diskUsage.toFixed(1) + '%';
@@ -295,12 +354,11 @@ async function loadQuickStatus() {
             updateBarColor('diskBar', diskUsage);
         }
         
-        // Update Network
         if (data.network) {
             const status = data.network.connected ? 'Connected' : 'Disconnected';
-            document.getElementById('networkStatus').textContent = status;
-            document.getElementById('networkStatus').className = 'stat-value ' + 
-                (data.network.connected ? 'text-success' : 'text-danger');
+            const netStatus = document.getElementById('networkStatus');
+            netStatus.textContent = status;
+            netStatus.className = 'stat-value ' + (data.network.connected ? 'text-success' : 'text-danger');
         }
     } catch (error) {
         console.error('Error loading quick status:', error);
@@ -309,10 +367,11 @@ async function loadQuickStatus() {
 
 function updateBarColor(barId, value) {
     const bar = document.getElementById(barId);
-    if (value >= 90) bar.style.backgroundColor = '#dc3545';
-    else if (value >= 70) bar.style.backgroundColor = '#fd7e14';
-    else if (value >= 50) bar.style.backgroundColor = '#ffc107';
-    else bar.style.backgroundColor = '#28a745';
+    if (!bar) return;
+    if (value >= 90) bar.style.backgroundColor = '#d13438';
+    else if (value >= 70) bar.style.backgroundColor = '#d97706';
+    else if (value >= 50) bar.style.backgroundColor = '#0284c7';
+    else bar.style.backgroundColor = '#107c41';
 }
 
 let performanceChart;
@@ -326,20 +385,26 @@ function initPerformanceChart() {
             labels: [],
             datasets: [
                 {
-                    label: 'CPU',
+                    label: 'CPU Usage',
                     data: [],
                     borderColor: '#0078D4',
                     backgroundColor: 'rgba(0, 120, 212, 0.1)',
                     fill: true,
-                    tension: 0.4
+                    tension: 0.35,
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    pointHoverRadius: 5
                 },
                 {
-                    label: 'RAM',
+                    label: 'RAM Usage',
                     data: [],
-                    borderColor: '#28a745',
-                    backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                    borderColor: '#107c41',
+                    backgroundColor: 'rgba(16, 124, 65, 0.1)',
                     fill: true,
-                    tension: 0.4
+                    tension: 0.35,
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    pointHoverRadius: 5
                 }
             ]
         },
@@ -349,17 +414,33 @@ function initPerformanceChart() {
             plugins: {
                 legend: {
                     display: true,
-                    position: 'top'
+                    position: 'top',
+                    labels: {
+                        usePointStyle: true,
+                        boxWidth: 8,
+                        font: {
+                            family: "'Segoe UI Variable Text', 'Segoe UI', 'Inter', sans-serif",
+                            size: 12
+                        }
+                    }
                 }
             },
             scales: {
+                x: {
+                    grid: { display: false },
+                    ticks: {
+                        font: { family: "'Segoe UI Variable Text', 'Segoe UI', sans-serif", size: 11 },
+                        color: '#64748b'
+                    }
+                },
                 y: {
                     beginAtZero: true,
                     max: 100,
+                    grid: { color: 'rgba(0, 0, 0, 0.04)' },
                     ticks: {
-                        callback: function(value) {
-                            return value + '%';
-                        }
+                        callback: function(value) { return value + '%'; },
+                        font: { family: "'Segoe UI Variable Text', 'Segoe UI', sans-serif", size: 11 },
+                        color: '#64748b'
                     }
                 }
             },
@@ -370,10 +451,7 @@ function initPerformanceChart() {
         }
     });
     
-    // Add initial data
     updateChart();
-    
-    // Update chart every 5 seconds
     setInterval(updateChart, 5000);
 }
 
@@ -402,6 +480,7 @@ async function updateChart() {
 
 async function loadRecommendations() {
     const container = document.getElementById('recommendationsContainer');
+    if (!container) return;
     
     try {
         const response = await fetch('/api/health');
@@ -409,17 +488,20 @@ async function loadRecommendations() {
         
         if (data.components && data.components.length > 0) {
             let html = '<div class="recommendations-list">';
+            let issueCount = 0;
             
             data.components.forEach(component => {
                 if (component.status !== 'healthy') {
-                    const severityIcon = component.status === 'critical' ? 'exclamation-triangle' : 'info-circle';
-                    const severityClass = component.status === 'critical' ? 'severity-critical' : 'severity-warning';
+                    issueCount++;
+                    const isCritical = component.status === 'critical';
+                    const severityIcon = isCritical ? 'bxs-error-alt' : 'bx-info-circle';
+                    const severityClass = isCritical ? 'severity-critical' : 'severity-warning';
                     
                     html += `
                         <div class="recommendation-item ${severityClass}">
                             <div class="recommendation-header">
-                                <i class='bx bx-${severityIcon}'></i>
-                                <span class="recommendation-title">${component.name.toUpperCase()}</span>
+                                <i class='bx ${severityIcon}'></i>
+                                <span class="recommendation-title">${component.name.toUpperCase()} DIAGNOSTIC</span>
                             </div>
                             <p class="recommendation-text">${getRecommendationText(component)}</p>
                         </div>
@@ -428,9 +510,13 @@ async function loadRecommendations() {
             });
             
             html += '</div>';
-            container.innerHTML = html || '<div class="empty-state"><i class="bx bx-check-circle"></i><p>All systems healthy!</p></div>';
+            if (issueCount === 0) {
+                container.innerHTML = '<div class="empty-state defender-healthy-state"><i class="bx bxs-check-shield text-success"></i><p class="fw-semibold mt-2 mb-0">No Action Required</p><span class="text-muted small">All monitored components are performing within healthy parameters.</span></div>';
+            } else {
+                container.innerHTML = html;
+            }
         } else {
-            container.innerHTML = '<div class="empty-state"><i class="bx bx-check-circle"></i><p>All systems healthy!</p></div>';
+            container.innerHTML = '<div class="empty-state defender-healthy-state"><i class="bx bxs-check-shield text-success"></i><p class="fw-semibold mt-2 mb-0">No Action Required</p><span class="text-muted small">All monitored components are performing within healthy parameters.</span></div>';
         }
     } catch (error) {
         console.error('Error loading recommendations:', error);
@@ -440,17 +526,107 @@ async function loadRecommendations() {
 
 function getRecommendationText(component) {
     const texts = {
-        cpu: `CPU usage at ${component.details?.usage?.toFixed(1) || 0}%. ${component.details?.usage > 70 ? 'Consider closing unused applications.' : 'Normal usage levels.'}`,
-        ram: `Memory at ${component.details?.usage?.toFixed(1) || 0}%. ${component.details?.usage > 70 ? 'Free up some RAM by closing apps.' : 'Memory usage is healthy.'}`,
-        disk: `Disk usage is high. ${component.details?.worst_partition || 'A partition'} is running low on space.`,
-        network: component.details?.connected ? `Network latency: ${component.details?.latency || 'N/A'}ms` : 'No internet connection detected.',
-        battery: component.details?.has_battery ? `Battery at ${component.details?.percent || 0}%. ${component.details?.is_charging ? 'Currently charging.' : 'Consider plugging in.'}` : 'Desktop system - no battery.'
+        cpu: `High CPU load detected at ${component.details?.usage?.toFixed(1) || 0}%. Close resource-heavy processes if system lags.`,
+        ram: `Memory usage elevated at ${component.details?.usage?.toFixed(1) || 0}%. Consider terminating idle applications.`,
+        disk: `Storage capacity warning. Partition ${component.details?.worst_partition || 'primary'} is running low on disk space.`,
+        network: component.details?.connected ? `Network connection active (latency: ${component.details?.latency || 'N/A'}ms).` : 'No active network connectivity detected.',
+        battery: component.details?.has_battery ? `Battery level at ${component.details?.percent || 0}%. ${component.details?.is_charging ? 'Device is charging.' : 'Connect to power adapter soon.'}` : 'Desktop system running on AC main power.'
     };
     return texts[component.name] || 'Review system settings.';
 }
 
+async function loadRootCauseAnalysis() {
+    const container = document.getElementById('rootCauseContainer');
+    if (!container) return;
+
+    try {
+        const response = await fetch('/api/root-cause');
+        const data = await response.json();
+
+        if (!data.findings || data.findings.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state defender-healthy-state">
+                    <i class="bx bxs-check-shield text-success"></i>
+                    <p class="fw-semibold mt-2 mb-0">System Operating Optimally</p>
+                    <span class="text-muted small">No root causes or execution bottlenecks detected by local AI inference rules.</span>
+                </div>`;
+            return;
+        }
+
+        let html = `
+            <div class="root-cause-summary-bar mb-3">
+                <div class="root-cause-summary-text">
+                    <i class='bx bx-info-circle text-primary me-2'></i>
+                    ${data.summary}
+                </div>
+                <div class="confidence-chip">
+                    <i class='bx bx-target-lock me-1'></i> Overall ${data.overall_confidence}% Confidence
+                </div>
+            </div>
+            <div class="root-cause-findings-list">
+        `;
+
+        data.findings.forEach(finding => {
+            const severityClass = 'severity-' + finding.severity;
+            
+            let causesHtml = '';
+            finding.possible_causes.forEach(cause => {
+                causesHtml += `<li><i class='bx bx-error-circle'></i> <span>${cause}</span></li>`;
+            });
+
+            let stepsHtml = '';
+            finding.step_by_step_recommendations.forEach(step => {
+                stepsHtml += `<li><i class='bx bx-check-square text-success me-2'></i><span>${step}</span></li>`;
+            });
+
+            html += `
+                <div class="root-cause-item ${severityClass}">
+                    <div class="root-cause-header">
+                        <div class="root-cause-title">
+                            <i class='bx bx-microchip text-primary me-1'></i>
+                            <span>${finding.title}</span>
+                            <span class="badge bg-light text-secondary border ms-2">${finding.component}</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="confidence-chip"><i class='bx bx-target-lock me-1'></i> ${finding.confidence_score}% Confidence</span>
+                            <span class="severity-pill ${severityClass}">${finding.severity} Severity</span>
+                        </div>
+                    </div>
+                    <div class="symptom-box mb-3">
+                        <i class='bx bx-radar me-1 text-primary'></i>
+                        <strong>Symptom Evidence:</strong> ${finding.symptom_evidence}
+                    </div>
+                    <div class="mb-3">
+                        <div class="root-cause-section-title">
+                            <i class='bx bx-help-circle me-1'></i> Possible Technical Root Causes
+                        </div>
+                        <ul class="causes-list mb-0">
+                            ${causesHtml}
+                        </ul>
+                    </div>
+                    <div class="recommendations-box">
+                        <div class="root-cause-section-title text-success">
+                            <i class='bx bx-list-check me-1'></i> Step-by-Step Resolution Recommendations
+                        </div>
+                        <ul class="recommendations-steps mb-0">
+                            ${stepsHtml}
+                        </ul>
+                    </div>
+                </div>
+            `;
+        });
+
+        html += `</div>`;
+        container.innerHTML = html;
+    } catch (error) {
+        console.error('Error loading AI root cause analysis:', error);
+        container.innerHTML = '<div class="empty-state"><p>Unable to run AI root cause analysis.</p></div>';
+    }
+}
+
 function animateValue(id, start, end, duration) {
     const obj = document.getElementById(id);
+    if (!obj) return;
     const range = end - start;
     let current = start;
     const increment = end > start ? range / (duration / 16) : range / (duration / 16);

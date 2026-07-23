@@ -142,6 +142,69 @@
     </div>
 </div>
 
+<!-- AI Root Cause Analysis Section -->
+{% set root_cause = scan.get_data('root_cause_analysis') %}
+{% if root_cause and root_cause.get('findings') %}
+<div class="row mb-4">
+    <div class="col-12" data-aos="fade-up">
+        <div class="card root-cause-card defender-card">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="mb-0"><i class='bx bx-brain text-primary me-2'></i> AI Root Cause Analysis Report</h5>
+                <span class="confidence-chip"><i class='bx bx-target-lock me-1'></i> {{ root_cause.get('overall_confidence', 95) }}% Confidence</span>
+            </div>
+            <div class="card-body">
+                <div class="root-cause-summary-bar mb-3">
+                    <div class="root-cause-summary-text">
+                        <i class='bx bx-info-circle text-primary me-2'></i> {{ root_cause.get('summary') }}
+                    </div>
+                </div>
+                <div class="root-cause-findings-list">
+                    {% for finding in root_cause.get('findings', []) %}
+                    <div class="root-cause-item severity-{{ finding.severity }}">
+                        <div class="root-cause-header">
+                            <div class="root-cause-title">
+                                <i class='bx bx-microchip text-primary me-1'></i>
+                                <span>{{ finding.title }}</span>
+                                <span class="badge bg-light text-secondary border ms-2">{{ finding.component }}</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="confidence-chip"><i class='bx bx-target-lock me-1'></i> {{ finding.confidence_score }}% Confidence</span>
+                                <span class="severity-pill severity-{{ finding.severity }}">{{ finding.severity }} Severity</span>
+                            </div>
+                        </div>
+                        <div class="symptom-box mb-3">
+                            <i class='bx bx-radar me-1 text-primary'></i>
+                            <strong>Symptom Evidence:</strong> {{ finding.symptom_evidence }}
+                        </div>
+                        <div class="mb-3">
+                            <div class="root-cause-section-title">
+                                <i class='bx bx-help-circle me-1'></i> Possible Technical Root Causes
+                            </div>
+                            <ul class="causes-list mb-0">
+                                {% for cause in finding.possible_causes %}
+                                <li><i class='bx bx-error-circle'></i> <span>{{ cause }}</span></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="recommendations-box">
+                            <div class="root-cause-section-title text-success">
+                                <i class='bx bx-list-check me-1'></i> Step-by-Step Resolution Recommendations
+                            </div>
+                            <ul class="recommendations-steps mb-0">
+                                {% for step in finding.step_by_step_recommendations %}
+                                <li><i class='bx bx-check-square text-success me-2'></i><span>{{ step }}</span></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
 <!-- Recommendations -->
 <div class="row">
     <div class="col-12">

@@ -45,6 +45,9 @@ def create_app(config_name: str = 'development') -> Flask:
     bcrypt.init_app(app)
     migrate.init_app(app, db)
 
+    # Ensure database schema is up-to-date
+    ensure_database_schema(app)
+
     # Login manager configuration
     login_manager.login_view = 'auth.login'
     login_manager.login_message = 'Please log in to access this page.'
@@ -54,7 +57,7 @@ def create_app(config_name: str = 'development') -> Flask:
     @login_manager.user_loader
     def load_user(user_id):
         from app.models.user import User
-        return User.query.get(int(user_id))
+        return db.session.get(User, int(user_id))
 
     # Register blueprints
     register_blueprints(app)
@@ -66,6 +69,22 @@ def create_app(config_name: str = 'development') -> Flask:
     register_jinja_filters(app)
 
     return app
+
+
+def ensure_database_schema(app: Flask) -> None:
+    """Ensure all required database tables and columns exist."""
+    with app.app_context():
+        try:
+            db.create_all()
+            with db.engine.connect() as conn:
+                result = conn.execute(db.text("PRAGMA table_info(scans)")).fetchall()
+                columns = [row[1] for row in result]
+                if columns and 'root_cause_analysis' not in columns:
+                    conn.execute(db.text("ALTER TABLE scans ADD COLUMN root_cause_analysis TEXT"))
+                    conn.commit()
+                    app.logger.info("Migrated SQLite database: Added scans.root_cause_analysis column")
+        except Exception as e:
+            app.logger.warning(f"Database schema check notice: {str(e)}")
 
 
 def register_blueprints(app: Flask) -> None:

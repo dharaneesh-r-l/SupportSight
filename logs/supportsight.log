@@ -841,3 +841,284 @@
 2026-07-23 11:13:05,287 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 11:13:05] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
 2026-07-23 11:13:05,317 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 11:13:05] "[36mGET /static/js/charts.js HTTP/1.1[0m" 304 -
 2026-07-23 11:13:31,145 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 11:13:31] "GET /diagnostics/processes HTTP/1.1" 200 -
+2026-07-23 12:29:57,813 - app - INFO - ============================================================
+2026-07-23 12:29:57,814 - app - INFO - SupportSight - AI-Powered Windows Diagnostics Platform
+2026-07-23 12:29:57,814 - app - INFO - Environment: development
+2026-07-23 12:29:57,814 - app - INFO - ============================================================
+2026-07-23 12:29:57,816 - app - INFO - Database tables created successfully
+2026-07-23 12:29:57,816 - app - INFO - Starting server on 0.0.0.0:5000
+2026-07-23 12:29:57,895 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.136.174.37:5000
+2026-07-23 12:29:57,895 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-07-23 12:29:57,898 - werkzeug - INFO -  * Restarting with stat
+2026-07-23 12:29:58,860 - app - INFO - ============================================================
+2026-07-23 12:29:58,860 - app - INFO - SupportSight - AI-Powered Windows Diagnostics Platform
+2026-07-23 12:29:58,860 - app - INFO - Environment: development
+2026-07-23 12:29:58,860 - app - INFO - ============================================================
+2026-07-23 12:29:58,877 - app - INFO - Database tables created successfully
+2026-07-23 12:29:58,877 - app - INFO - Starting server on 0.0.0.0:5000
+2026-07-23 12:29:58,877 - werkzeug - WARNING -  * Debugger is active!
+2026-07-23 12:29:58,898 - werkzeug - INFO -  * Debugger PIN: 274-167-851
+2026-07-23 12:30:05,364 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:30:05] "[32mGET / HTTP/1.1[0m" 302 -
+2026-07-23 12:30:05,496 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:30:05] "GET /auth/login HTTP/1.1" 200 -
+2026-07-23 12:30:05,813 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:30:05] "GET /static/css/main.css HTTP/1.1" 200 -
+2026-07-23 12:30:05,816 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:30:05] "GET /static/css/components.css HTTP/1.1" 200 -
+2026-07-23 12:30:05,842 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:30:05] "GET /static/js/charts.js HTTP/1.1" 200 -
+2026-07-23 12:30:05,857 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:30:05] "GET /static/js/main.js HTTP/1.1" 200 -
+2026-07-23 12:30:22,261 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:30:22] "[32mPOST /auth/login HTTP/1.1[0m" 302 -
+2026-07-23 12:30:22,370 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:30:22] "[35m[1mGET /home HTTP/1.1[0m" 500 -
+2026-07-23 12:30:22,495 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:30:22] "GET /home?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+2026-07-23 12:30:22,499 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:30:22] "GET /home?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+2026-07-23 12:30:22,627 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:30:22] "GET /home?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2026-07-23 12:30:22,660 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:30:22] "[36mGET /home?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2026-07-23 12:30:37,362 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:30:37] "[32mPOST /auth/login HTTP/1.1[0m" 302 -
+2026-07-23 12:30:37,420 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:30:37] "[35m[1mGET /home HTTP/1.1[0m" 500 -
+2026-07-23 12:30:37,498 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:30:37] "[36mGET /home?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2026-07-23 12:30:37,500 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:30:37] "[36mGET /home?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2026-07-23 12:30:37,553 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:30:37] "[36mGET /home?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2026-07-23 12:37:11,079 - app - INFO - ============================================================
+2026-07-23 12:37:11,079 - app - INFO - SupportSight - AI-Powered Windows Diagnostics Platform
+2026-07-23 12:37:11,079 - app - INFO - Environment: development
+2026-07-23 12:37:11,079 - app - INFO - ============================================================
+2026-07-23 12:37:11,092 - app - INFO - Database tables created successfully
+2026-07-23 12:37:11,092 - app - INFO - Starting server on 0.0.0.0:5000
+2026-07-23 12:37:11,138 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.136.174.37:5000
+2026-07-23 12:37:11,138 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-07-23 12:37:11,143 - werkzeug - INFO -  * Restarting with stat
+2026-07-23 12:37:12,116 - app - INFO - ============================================================
+2026-07-23 12:37:12,117 - app - INFO - SupportSight - AI-Powered Windows Diagnostics Platform
+2026-07-23 12:37:12,117 - app - INFO - Environment: development
+2026-07-23 12:37:12,117 - app - INFO - ============================================================
+2026-07-23 12:37:12,120 - app - INFO - Database tables created successfully
+2026-07-23 12:37:12,120 - app - INFO - Starting server on 0.0.0.0:5000
+2026-07-23 12:37:12,135 - werkzeug - WARNING -  * Debugger is active!
+2026-07-23 12:37:12,137 - werkzeug - INFO -  * Debugger PIN: 274-167-851
+2026-07-23 12:37:16,769 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:37:16] "[32mGET / HTTP/1.1[0m" 302 -
+2026-07-23 12:37:17,129 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:37:17] "GET /home HTTP/1.1" 200 -
+2026-07-23 12:37:17,495 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:37:17] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2026-07-23 12:37:17,498 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:37:17] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2026-07-23 12:37:17,498 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:37:17] "[36mGET /static/css/components.css HTTP/1.1[0m" 304 -
+2026-07-23 12:37:17,498 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:37:17] "[36mGET /static/js/charts.js HTTP/1.1[0m" 304 -
+2026-07-23 12:37:17,950 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:37:17] "GET /api/cpu/history?points=20 HTTP/1.1" 200 -
+2026-07-23 12:37:17,996 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:37:17] "GET /api/ram/history?points=20 HTTP/1.1" 200 -
+2026-07-23 12:37:19,077 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:37:19] "GET /api/status HTTP/1.1" 200 -
+2026-07-23 12:37:22,892 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.ipify.org:443
+2026-07-23 12:37:22,996 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:37:22] "GET /api/cpu/history?points=20 HTTP/1.1" 200 -
+2026-07-23 12:37:23,335 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:37:23] "GET /api/ram/history?points=20 HTTP/1.1" 200 -
+2026-07-23 12:37:23,669 - urllib3.connectionpool - DEBUG - https://api.ipify.org:443 "GET / HTTP/1.1" 200 12
+2026-07-23 12:37:23,725 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:37:23] "[35m[1mGET /api/root-cause HTTP/1.1[0m" 500 -
+2026-07-23 12:37:23,851 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:37:23] "GET /api/health HTTP/1.1" 200 -
+2026-07-23 12:37:24,080 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.ipify.org:443
+2026-07-23 12:37:24,589 - urllib3.connectionpool - DEBUG - https://api.ipify.org:443 "GET / HTTP/1.1" 200 12
+2026-07-23 12:37:24,748 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:37:24] "GET /api/health HTTP/1.1" 200 -
+2026-07-23 12:37:27,912 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:37:27] "GET /api/cpu/history?points=20 HTTP/1.1" 200 -
+2026-07-23 12:37:27,919 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:37:27] "GET /api/ram/history?points=20 HTTP/1.1" 200 -
+2026-07-23 12:37:30,138 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:37:30] "GET /diagnostics HTTP/1.1" 200 -
+2026-07-23 12:37:30,228 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:37:30] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2026-07-23 12:37:30,238 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:37:30] "[36mGET /static/css/components.css HTTP/1.1[0m" 304 -
+2026-07-23 12:37:30,241 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:37:30] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2026-07-23 12:37:30,242 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:37:30] "[36mGET /static/js/charts.js HTTP/1.1[0m" 304 -
+2026-07-23 12:37:30,585 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:37:30] "GET /api/status HTTP/1.1" 200 -
+2026-07-23 12:37:34,879 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:37:34] "GET /api/processes?limit=1 HTTP/1.1" 200 -
+2026-07-23 12:37:36,495 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:37:36] "GET /reports/reports HTTP/1.1" 200 -
+2026-07-23 12:37:36,537 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:37:36] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2026-07-23 12:37:36,557 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:37:36] "[36mGET /static/css/components.css HTTP/1.1[0m" 304 -
+2026-07-23 12:37:36,558 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:37:36] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2026-07-23 12:37:36,559 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:37:36] "[36mGET /static/js/charts.js HTTP/1.1[0m" 304 -
+2026-07-23 12:37:40,080 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.ipify.org:443
+2026-07-23 12:37:40,597 - urllib3.connectionpool - DEBUG - https://api.ipify.org:443 "GET / HTTP/1.1" 200 12
+2026-07-23 12:37:51,633 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.ipify.org:443
+2026-07-23 12:37:52,144 - urllib3.connectionpool - DEBUG - https://api.ipify.org:443 "GET / HTTP/1.1" 200 12
+2026-07-23 12:37:52,303 - app.services.scan_service - INFO - Full scan completed for user 1. Health score: 63.4
+2026-07-23 12:37:52,310 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:37:52] "[32mGET /quick-scan HTTP/1.1[0m" 302 -
+2026-07-23 12:37:52,344 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:37:52] "GET /scan/3 HTTP/1.1" 200 -
+2026-07-23 12:37:52,407 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:37:52] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2026-07-23 12:37:52,417 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:37:52] "[36mGET /static/css/components.css HTTP/1.1[0m" 304 -
+2026-07-23 12:37:52,418 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:37:52] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2026-07-23 12:37:52,448 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:37:52] "[36mGET /static/js/charts.js HTTP/1.1[0m" 304 -
+2026-07-23 12:38:29,890 - app.services.reports_service - INFO - Enterprise PDF report successfully generated: C:\Users\Dharaneesh\Downloads\SupportSight\supportSight\reports\supportsight_enterprise_audit_3_20260723_123829.pdf
+2026-07-23 12:38:29,911 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:38:29] "GET /reports/report/3/download HTTP/1.1" 200 -
+2026-07-23 12:43:47,505 - app - INFO - ============================================================
+2026-07-23 12:43:47,505 - app - INFO - SupportSight - AI-Powered Windows Diagnostics Platform
+2026-07-23 12:43:47,506 - app - INFO - Environment: development
+2026-07-23 12:43:47,506 - app - INFO - ============================================================
+2026-07-23 12:43:47,506 - app - INFO - Database tables created successfully
+2026-07-23 12:43:47,506 - app - INFO - Starting server on 0.0.0.0:5000
+2026-07-23 12:43:47,636 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.136.174.37:5000
+2026-07-23 12:43:47,636 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-07-23 12:43:47,636 - werkzeug - INFO -  * Restarting with stat
+2026-07-23 12:43:48,486 - app - INFO - ============================================================
+2026-07-23 12:43:48,486 - app - INFO - SupportSight - AI-Powered Windows Diagnostics Platform
+2026-07-23 12:43:48,486 - app - INFO - Environment: development
+2026-07-23 12:43:48,486 - app - INFO - ============================================================
+2026-07-23 12:43:48,486 - app - INFO - Database tables created successfully
+2026-07-23 12:43:48,486 - app - INFO - Starting server on 0.0.0.0:5000
+2026-07-23 12:43:48,496 - werkzeug - WARNING -  * Debugger is active!
+2026-07-23 12:43:48,507 - werkzeug - INFO -  * Debugger PIN: 274-167-851
+2026-07-23 12:43:54,300 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:43:54] "[32mGET / HTTP/1.1[0m" 302 -
+2026-07-23 12:43:54,905 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:43:54] "GET /home HTTP/1.1" 200 -
+2026-07-23 12:43:55,340 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:43:55] "[36mGET /static/css/components.css HTTP/1.1[0m" 304 -
+2026-07-23 12:43:55,346 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:43:55] "[36mGET /static/js/charts.js HTTP/1.1[0m" 304 -
+2026-07-23 12:43:55,348 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:43:55] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2026-07-23 12:43:55,355 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:43:55] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2026-07-23 12:43:55,581 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:43:55] "GET /api/cpu/history?points=20 HTTP/1.1" 200 -
+2026-07-23 12:43:55,705 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:43:55] "GET /api/ram/history?points=20 HTTP/1.1" 200 -
+2026-07-23 12:43:56,617 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:43:56] "GET /api/status HTTP/1.1" 200 -
+2026-07-23 12:44:00,729 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:44:00] "GET /api/cpu/history?points=20 HTTP/1.1" 200 -
+2026-07-23 12:44:00,878 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:44:00] "GET /api/ram/history?points=20 HTTP/1.1" 200 -
+2026-07-23 12:44:02,666 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.ipify.org:443
+2026-07-23 12:44:02,677 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:44:02] "[35m[1mGET /api/root-cause HTTP/1.1[0m" 500 -
+2026-07-23 12:44:03,441 - urllib3.connectionpool - DEBUG - https://api.ipify.org:443 "GET / HTTP/1.1" 200 12
+2026-07-23 12:44:03,647 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:44:03] "GET /api/health HTTP/1.1" 200 -
+2026-07-23 12:44:03,869 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.ipify.org:443
+2026-07-23 12:44:04,672 - urllib3.connectionpool - DEBUG - https://api.ipify.org:443 "GET / HTTP/1.1" 200 12
+2026-07-23 12:44:04,874 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:44:04] "GET /api/health HTTP/1.1" 200 -
+2026-07-23 12:44:05,577 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:44:05] "GET /api/cpu/history?points=20 HTTP/1.1" 200 -
+2026-07-23 12:44:05,586 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:44:05] "GET /api/ram/history?points=20 HTTP/1.1" 200 -
+2026-07-23 12:44:10,627 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:44:10] "GET /api/cpu/history?points=20 HTTP/1.1" 200 -
+2026-07-23 12:44:10,899 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:44:10] "GET /api/ram/history?points=20 HTTP/1.1" 200 -
+2026-07-23 12:44:15,652 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:44:15] "GET /api/cpu/history?points=20 HTTP/1.1" 200 -
+2026-07-23 12:44:15,768 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:44:15] "GET /api/ram/history?points=20 HTTP/1.1" 200 -
+2026-07-23 12:44:21,022 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:44:21] "GET /api/cpu/history?points=20 HTTP/1.1" 200 -
+2026-07-23 12:44:21,115 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:44:21] "GET /api/ram/history?points=20 HTTP/1.1" 200 -
+2026-07-23 12:44:25,716 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:44:25] "GET /api/cpu/history?points=20 HTTP/1.1" 200 -
+2026-07-23 12:44:25,924 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:44:25] "GET /api/ram/history?points=20 HTTP/1.1" 200 -
+2026-07-23 12:44:26,171 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.ipify.org:443
+2026-07-23 12:44:26,296 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:44:26] "GET /api/status HTTP/1.1" 200 -
+2026-07-23 12:44:27,139 - urllib3.connectionpool - DEBUG - https://api.ipify.org:443 "GET / HTTP/1.1" 200 12
+2026-07-23 12:44:28,697 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:44:28] "GET /api/health HTTP/1.1" 200 -
+2026-07-23 12:44:30,783 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:44:30] "GET /api/cpu/history?points=20 HTTP/1.1" 200 -
+2026-07-23 12:44:31,062 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:44:31] "GET /api/ram/history?points=20 HTTP/1.1" 200 -
+2026-07-23 12:44:34,505 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:44:34] "GET /diagnostics/processes HTTP/1.1" 200 -
+2026-07-23 12:44:34,525 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:44:34] "[35m[1mGET /api/root-cause HTTP/1.1[0m" 500 -
+2026-07-23 12:44:34,623 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:44:34] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2026-07-23 12:44:34,633 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:44:34] "[36mGET /static/css/components.css HTTP/1.1[0m" 304 -
+2026-07-23 12:44:34,639 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:44:34] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2026-07-23 12:44:34,643 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:44:34] "[36mGET /static/js/charts.js HTTP/1.1[0m" 304 -
+2026-07-23 12:44:44,912 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.ipify.org:443
+2026-07-23 12:44:45,766 - urllib3.connectionpool - DEBUG - https://api.ipify.org:443 "GET / HTTP/1.1" 200 12
+2026-07-23 12:44:57,446 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.ipify.org:443
+2026-07-23 12:44:58,078 - urllib3.connectionpool - DEBUG - https://api.ipify.org:443 "GET / HTTP/1.1" 200 12
+2026-07-23 12:44:58,373 - app.services.scan_service - INFO - Full scan completed for user 1. Health score: 64.4
+2026-07-23 12:44:58,378 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:44:58] "[32mGET /quick-scan HTTP/1.1[0m" 302 -
+2026-07-23 12:44:58,439 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:44:58] "GET /scan/4 HTTP/1.1" 200 -
+2026-07-23 12:44:58,547 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:44:58] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2026-07-23 12:44:58,557 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:44:58] "[36mGET /static/css/components.css HTTP/1.1[0m" 304 -
+2026-07-23 12:44:58,571 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:44:58] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2026-07-23 12:44:58,622 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:44:58] "[36mGET /static/js/charts.js HTTP/1.1[0m" 304 -
+2026-07-23 12:45:18,128 - app.services.reports_service - INFO - Enterprise PDF report successfully generated: C:\Users\Dharaneesh\Downloads\SupportSight\supportSight\reports\supportsight_enterprise_audit_4_20260723_124518.pdf
+2026-07-23 12:45:18,158 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:45:18] "GET /reports/report/4/download HTTP/1.1" 200 -
+2026-07-23 12:45:43,263 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:45:43] "GET /diagnostics/system HTTP/1.1" 200 -
+2026-07-23 12:45:43,313 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:45:43] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2026-07-23 12:45:43,327 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:45:43] "[36mGET /static/css/components.css HTTP/1.1[0m" 304 -
+2026-07-23 12:45:43,329 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:45:43] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2026-07-23 12:45:43,330 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:45:43] "[36mGET /static/js/charts.js HTTP/1.1[0m" 304 -
+2026-07-23 12:46:05,408 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:46:05] "GET /auth/profile HTTP/1.1" 200 -
+2026-07-23 12:46:05,460 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:46:05] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2026-07-23 12:46:05,471 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:46:05] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2026-07-23 12:46:05,474 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:46:05] "[36mGET /static/css/components.css HTTP/1.1[0m" 304 -
+2026-07-23 12:46:05,474 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:46:05] "[36mGET /static/js/charts.js HTTP/1.1[0m" 304 -
+2026-07-23 12:46:16,910 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:46:16] "GET /auth/profile HTTP/1.1" 200 -
+2026-07-23 12:46:16,972 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:46:16] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2026-07-23 12:46:16,979 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:46:16] "[36mGET /static/css/components.css HTTP/1.1[0m" 304 -
+2026-07-23 12:46:16,982 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:46:16] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2026-07-23 12:46:16,985 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:46:16] "[36mGET /static/js/charts.js HTTP/1.1[0m" 304 -
+2026-07-23 12:46:26,414 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:46:26] "GET /reports/reports HTTP/1.1" 200 -
+2026-07-23 12:46:26,459 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:46:26] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2026-07-23 12:46:26,462 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:46:26] "[36mGET /static/css/components.css HTTP/1.1[0m" 304 -
+2026-07-23 12:46:26,466 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:46:26] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2026-07-23 12:46:26,466 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:46:26] "[36mGET /static/js/charts.js HTTP/1.1[0m" 304 -
+2026-07-23 12:46:28,500 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:46:28] "GET /scan-history HTTP/1.1" 200 -
+2026-07-23 12:46:28,564 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:46:28] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2026-07-23 12:46:28,571 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:46:28] "[36mGET /static/css/components.css HTTP/1.1[0m" 304 -
+2026-07-23 12:46:28,575 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:46:28] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2026-07-23 12:46:28,578 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:46:28] "[36mGET /static/js/charts.js HTTP/1.1[0m" 304 -
+2026-07-23 12:46:46,006 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:46:46] "GET /diagnostics/processes HTTP/1.1" 200 -
+2026-07-23 12:46:46,056 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:46:46] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2026-07-23 12:46:46,067 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:46:46] "[36mGET /static/css/components.css HTTP/1.1[0m" 304 -
+2026-07-23 12:46:46,067 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:46:46] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2026-07-23 12:46:46,111 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:46:46] "[36mGET /static/js/charts.js HTTP/1.1[0m" 304 -
+2026-07-23 12:52:47,232 - app - INFO - ============================================================
+2026-07-23 12:52:47,232 - app - INFO - SupportSight - AI-Powered Windows Diagnostics Platform
+2026-07-23 12:52:47,232 - app - INFO - Environment: development
+2026-07-23 12:52:47,234 - app - INFO - ============================================================
+2026-07-23 12:52:47,235 - app - INFO - Database tables created successfully
+2026-07-23 12:52:47,235 - app - INFO - Starting server on 0.0.0.0:5000
+2026-07-23 12:52:47,294 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.136.174.37:5000
+2026-07-23 12:52:47,294 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-07-23 12:52:47,298 - werkzeug - INFO -  * Restarting with stat
+2026-07-23 12:52:48,305 - app - INFO - ============================================================
+2026-07-23 12:52:48,306 - app - INFO - SupportSight - AI-Powered Windows Diagnostics Platform
+2026-07-23 12:52:48,306 - app - INFO - Environment: development
+2026-07-23 12:52:48,306 - app - INFO - ============================================================
+2026-07-23 12:52:48,307 - app - INFO - Database tables created successfully
+2026-07-23 12:52:48,307 - app - INFO - Starting server on 0.0.0.0:5000
+2026-07-23 12:52:48,321 - werkzeug - WARNING -  * Debugger is active!
+2026-07-23 12:52:48,324 - werkzeug - INFO -  * Debugger PIN: 274-167-851
+2026-07-23 12:52:54,403 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:52:54] "[32mGET / HTTP/1.1[0m" 302 -
+2026-07-23 12:52:54,759 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:52:54] "GET /home HTTP/1.1" 200 -
+2026-07-23 12:52:55,182 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:52:55] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2026-07-23 12:52:55,189 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:52:55] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2026-07-23 12:52:55,191 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:52:55] "[36mGET /static/js/charts.js HTTP/1.1[0m" 304 -
+2026-07-23 12:52:55,192 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:52:55] "[36mGET /static/css/components.css HTTP/1.1[0m" 304 -
+2026-07-23 12:52:55,522 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:52:55] "GET /api/cpu/history?points=20 HTTP/1.1" 200 -
+2026-07-23 12:52:56,637 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:52:56] "GET /api/ram/history?points=20 HTTP/1.1" 200 -
+2026-07-23 12:52:56,734 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:52:56] "GET /api/status HTTP/1.1" 200 -
+2026-07-23 12:53:00,591 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:53:00] "GET /api/cpu/history?points=20 HTTP/1.1" 200 -
+2026-07-23 12:53:00,858 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:53:00] "GET /api/ram/history?points=20 HTTP/1.1" 200 -
+2026-07-23 12:53:01,857 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.ipify.org:443
+2026-07-23 12:53:01,895 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:53:01] "GET /auth/profile HTTP/1.1" 200 -
+2026-07-23 12:53:01,919 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:53:01] "[35m[1mGET /api/root-cause HTTP/1.1[0m" 500 -
+2026-07-23 12:53:01,987 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:53:01] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2026-07-23 12:53:01,988 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:53:01] "[36mGET /static/css/components.css HTTP/1.1[0m" 304 -
+2026-07-23 12:53:01,991 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:53:01] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2026-07-23 12:53:01,991 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:53:01] "[36mGET /static/js/charts.js HTTP/1.1[0m" 304 -
+2026-07-23 12:53:02,082 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:53:02] "GET /api/system HTTP/1.1" 200 -
+2026-07-23 12:53:02,581 - urllib3.connectionpool - DEBUG - https://api.ipify.org:443 "GET / HTTP/1.1" 200 12
+2026-07-23 12:53:02,761 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:53:02] "GET /api/health HTTP/1.1" 200 -
+2026-07-23 12:53:02,973 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.ipify.org:443
+2026-07-23 12:53:03,614 - urllib3.connectionpool - DEBUG - https://api.ipify.org:443 "GET / HTTP/1.1" 200 12
+2026-07-23 12:53:03,776 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:53:03] "GET /api/health HTTP/1.1" 200 -
+2026-07-23 12:53:30,434 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:53:30] "GET /diagnostics/system HTTP/1.1" 200 -
+2026-07-23 12:53:30,505 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:53:30] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2026-07-23 12:53:30,515 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:53:30] "[36mGET /static/css/components.css HTTP/1.1[0m" 304 -
+2026-07-23 12:53:30,523 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:53:30] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2026-07-23 12:53:30,526 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:53:30] "[36mGET /static/js/charts.js HTTP/1.1[0m" 304 -
+2026-07-23 12:53:49,406 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:53:49] "GET /diagnostics HTTP/1.1" 200 -
+2026-07-23 12:53:49,485 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:53:49] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2026-07-23 12:53:49,492 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:53:49] "[36mGET /static/css/components.css HTTP/1.1[0m" 304 -
+2026-07-23 12:53:49,497 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:53:49] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2026-07-23 12:53:49,501 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:53:49] "[36mGET /static/js/charts.js HTTP/1.1[0m" 304 -
+2026-07-23 12:53:49,973 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:53:49] "GET /api/status HTTP/1.1" 200 -
+2026-07-23 12:53:53,105 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:53:53] "GET /diagnostics/disk HTTP/1.1" 200 -
+2026-07-23 12:53:53,330 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:53:53] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2026-07-23 12:53:53,408 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:53:53] "[36mGET /static/css/components.css HTTP/1.1[0m" 304 -
+2026-07-23 12:53:53,492 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:53:53] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2026-07-23 12:53:53,542 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:53:53] "[36mGET /static/js/charts.js HTTP/1.1[0m" 304 -
+2026-07-23 12:53:54,322 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:53:54] "GET /api/processes?limit=1 HTTP/1.1" 200 -
+2026-07-23 12:53:58,244 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:53:58] "GET /home HTTP/1.1" 200 -
+2026-07-23 12:53:58,289 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:53:58] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2026-07-23 12:53:58,296 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:53:58] "[36mGET /static/css/components.css HTTP/1.1[0m" 304 -
+2026-07-23 12:53:58,301 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:53:58] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2026-07-23 12:53:58,303 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:53:58] "[36mGET /static/js/charts.js HTTP/1.1[0m" 304 -
+2026-07-23 12:53:58,379 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:53:58] "GET /api/cpu/history?points=20 HTTP/1.1" 200 -
+2026-07-23 12:53:58,424 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:53:58] "GET /api/ram/history?points=20 HTTP/1.1" 200 -
+2026-07-23 12:53:58,582 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.ipify.org:443
+2026-07-23 12:53:58,638 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:53:58] "GET /api/status HTTP/1.1" 200 -
+2026-07-23 12:53:59,448 - urllib3.connectionpool - DEBUG - https://api.ipify.org:443 "GET / HTTP/1.1" 200 12
+2026-07-23 12:53:59,989 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:53:59] "GET /api/health HTTP/1.1" 200 -
+2026-07-23 12:54:00,666 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.ipify.org:443
+2026-07-23 12:54:01,565 - urllib3.connectionpool - DEBUG - https://api.ipify.org:443 "GET / HTTP/1.1" 200 12
+2026-07-23 12:54:02,036 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:54:02] "GET /api/health HTTP/1.1" 200 -
+2026-07-23 12:54:03,824 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2026 12:54:03] "[35m[1mGET /api/root-cause HTTP/1.1[0m" 500 -

@@ -60,7 +60,7 @@ class ProcessService:
                 continue
 
         # Sort by CPU usage by default
-        processes.sort(key=lambda x: x.get('cpu_percent', 0), reverse=True)
+        processes.sort(key=lambda x: x.get('cpu_percent') or 0, reverse=True)
 
         if limit:
             processes = processes[:limit]
@@ -166,7 +166,7 @@ class ProcessService:
                 continue
 
         # Sort by memory usage
-        processes.sort(key=lambda x: x.get('memory_percent', 0), reverse=True)
+        processes.sort(key=lambda x: x.get('memory_percent') or 0, reverse=True)
         return processes[:limit]
 
     @classmethod
