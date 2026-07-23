@@ -38,11 +38,14 @@ class SystemInfoService:
     def get_processor_name(cls) -> str:
         """
         Get accurate human-readable processor model name.
+        Works on Windows (Registry), Linux (/proc/cpuinfo), and macOS.
 
         Returns:
             Processor brand string (e.g., 'AMD Ryzen 5 5600H with Radeon Graphics')
         """
-        if platform.system() == 'Windows':
+        system = platform.system()
+
+        if system == 'Windows':
             try:
                 import winreg
                 reg = winreg.ConnectRegistry(None, winreg.HKEY_LOCAL_MACHINE)
@@ -55,6 +58,27 @@ class SystemInfoService:
             except Exception:
                 pass
 
+        elif system == 'Linux':
+            try:
+                with open('/proc/cpuinfo', 'r') as f:
+                    for line in f:
+                        if line.strip().startswith('model name'):
+                            return line.split(':', 1)[1].strip()
+            except Exception:
+                pass
+
+        elif system == 'Darwin':
+            try:
+                import subprocess
+                result = subprocess.run(
+                    ['sysctl', '-n', 'machdep.cpu.brand_string'],
+                    capture_output=True, text=True, timeout=3
+                )
+                if result.returncode == 0 and result.stdout.strip():
+                    return result.stdout.strip()
+            except Exception:
+                pass
+
         raw_proc = platform.processor()
         if raw_proc and not raw_proc.startswith('Intel64 Family') and not raw_proc.startswith('AMD64 Family'):
             return raw_proc
@@ -64,17 +88,41 @@ class SystemInfoService:
     def get_platform_info(cls) -> Dict[str, str]:
         """
         Get platform information with accurate OS and Processor names.
+        Cross-platform: Windows, Linux (Render/cloud), macOS.
 
         Returns:
             Dictionary with platform details
         """
-        win_ver = cls.get_windows_version()
-        sys_name = win_ver.get('name', platform.system())
+        system = platform.system()
+
+        if system == 'Windows':
+            win_ver = cls.get_windows_version()
+            sys_name = win_ver.get('name', system)
+            release = win_ver.get('display_version') or platform.release()
+            version = win_ver.get('build') or platform.version()
+        elif system == 'Linux':
+            # Try to get a friendly Linux distro name
+            try:
+                import distro
+                sys_name = f"{distro.name()} {distro.version()}".strip()
+            except ImportError:
+                try:
+                    with open('/etc/os-release') as f:
+                        lines = dict(l.strip().split('=', 1) for l in f if '=' in l)
+                    sys_name = lines.get('PRETTY_NAME', 'Linux').strip('"')
+                except Exception:
+                    sys_name = 'Linux'
+            release = platform.release()
+            version = platform.version()
+        else:
+            sys_name = system
+            release = platform.release()
+            version = platform.version()
 
         return {
             'system': sys_name,
-            'release': win_ver.get('display_version') or platform.release(),
-            'version': win_ver.get('build') or platform.version(),
+            'release': release,
+            'version': version,
             'architecture': platform.machine(),
             'processor': cls.get_processor_name(),
             'node': platform.node()
