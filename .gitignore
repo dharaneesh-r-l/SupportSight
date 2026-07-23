@@ -17,7 +17,8 @@ instance/
 *.db
 *.sqlite3
 logs/
-reports/
+/reports/
+
 
 # Environment variables
 .env
